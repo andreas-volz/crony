@@ -16,6 +16,7 @@ class CronTest1 : public CPPUNIT_NS::TestFixture
 {
   CPPUNIT_TEST_SUITE (CronTest1);
   CPPUNIT_TEST (myTest);
+  CPPUNIT_TEST (myTest2);
   CPPUNIT_TEST_SUITE_END ();
 
 public:
@@ -24,6 +25,7 @@ public:
 
 protected:
   void myTest (void);
+  void myTest2 (void);
 
 private:
 };

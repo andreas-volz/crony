@@ -115,6 +115,11 @@ double DateTime::operator - (const DateTime &dt)
   return difftime (mRawtime, dt.mRawtime);
 }
 
+bool DateTime::operator == (const DateTime &dt)
+{
+  return (mRawtime == dt.mRawtime);
+}
+
 // TODO: implement << operator
 void DateTime::dump ()
 {

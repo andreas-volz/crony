@@ -56,6 +56,8 @@ public:
 
   double operator - (const DateTime &dt);
 
+  bool operator == (const DateTime &dt);
+
   void dump ();
 
 private:
