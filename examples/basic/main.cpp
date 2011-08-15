@@ -5,18 +5,18 @@
 #include <ctime>
 
 // EFL
-#include <ecorexx/Ecorexx.h>
+//#include <ecorexx/Ecorexx.h>
 
 // local
-#include "DateTime.h"
-#include "Cron.h"
-#include "CronTab.h"
+#include "crony/DateTime.h"
+#include "crony/Cron.h"
+#include "crony/CronTab.h"
 
 using namespace std;
 
 void dumpTime (tm *ptm);
 
-bool timerEvent (Ecorexx::Timer &timer)
+/*bool timerEvent (Ecorexx::Timer &timer)
 {
   cout << "timer hit at:" << endl;
 
@@ -27,7 +27,7 @@ bool timerEvent (Ecorexx::Timer &timer)
   //Ecorexx::Timer *timer2 = Ecorexx::Timer::factory (20, timerSlot);
   
   return false;
-}
+}*/
 
 void dumpSeconds (double seconds)
 {
@@ -67,9 +67,9 @@ double secondsToHour (int hour)
 
 int main (int argc, const char **argv)
 {
-  auto_ptr <Ecorexx::Application> app (new Ecorexx::Application (argc, argv, "KidClock"));
+  /*auto_ptr <Ecorexx::Application> app (new Ecorexx::Application (argc, argv, "KidClock"));
 
-  sigc::slot <bool, Ecorexx::Timer&> timerSlot = sigc::ptr_fun (&timerEvent);
+  sigc::slot <bool, Ecorexx::Timer&> timerSlot = sigc::ptr_fun (&timerEvent);*/
 
   CronTab cronTab;
 
@@ -144,13 +144,13 @@ int main (int argc, const char **argv)
   
   // http://www.cplusplus.com/reference/clibrary/ctime/tm/
 
-  cout << "secondsToNextHour: " << endl;
+  /*cout << "secondsToNextHour: " << endl;
   double diff = 10;//secondsToHour (7);
   dumpSeconds (diff);
   
   Ecorexx::Timer *timer = Ecorexx::Timer::factory (diff, timerSlot);
 
-  app->exec();
+  app->exec();*/
 
   return 0;
 }
