@@ -2,7 +2,8 @@
 ## Created by Anjuta
 
 SUBDIRS = src \
-	include
+	include\
+	examples
 
 cronydocdir = ${prefix}/doc/kidclock
 cronydoc_DATA = \
