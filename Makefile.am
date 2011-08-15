@@ -3,7 +3,8 @@
 
 SUBDIRS = src \
 	include\
-	examples
+	examples\
+	test
 
 cronydocdir = ${prefix}/doc/kidclock
 cronydoc_DATA = \

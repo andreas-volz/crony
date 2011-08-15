@@ -33,5 +33,6 @@ examples/basic/Makefile
 include/Makefile
 include/crony/Makefile
 src/Makefile
-
+test/Makefile
+test/unit/Makefile
 ])
