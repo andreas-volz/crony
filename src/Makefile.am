@@ -12,19 +12,14 @@ AM_CFLAGS =\
 	 -Wall\
 	 -g
 
-bin_PROGRAMS = crony
+lib_LTLIBRARIES = \
+	libcrony.la
 
-crony_SOURCES = \
-	main.cpp  \
-	DateTime.cpp  \
-	DateTime.h  \
-	Cron.cpp  \
-	Cron.h  \
-	CronTab.cpp  \
-	CronTab.h
+libcrony_la_SOURCES = \
+	Cron.cpp     \
+	CronTab.cpp     \
+	DateTime.cpp
 
-crony_LDFLAGS = 
-
-crony_LDADD = \
-	$(EFL_LIBS)
+libcrony_la_CXXFLAGS = \
+	-I../include
 

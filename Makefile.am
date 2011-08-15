@@ -1,7 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 ## Created by Anjuta
 
-SUBDIRS = src 
+SUBDIRS = src \
+	include
 
 cronydocdir = ${prefix}/doc/kidclock
 cronydoc_DATA = \

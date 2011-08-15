@@ -29,6 +29,8 @@ AM_PROG_LIBTOOL
 PKG_CHECK_MODULES(EFL, ecorexx)
 AC_OUTPUT([
 Makefile
+include/Makefile
+include/crony/Makefile
 src/Makefile
 
 ])
