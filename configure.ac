@@ -26,6 +26,7 @@ AM_PROG_LIBTOOL
 
 
 
+PKG_CHECK_MODULES(UNIT, cppunit)
 AC_OUTPUT([
 Makefile
 examples/Makefile

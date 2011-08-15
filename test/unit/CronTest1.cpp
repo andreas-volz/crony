@@ -1,17 +1,17 @@
-#include "PageTest.h"
+#include "CronTest1.h"
 
-CPPUNIT_TEST_SUITE_REGISTRATION (PageTest);
+CPPUNIT_TEST_SUITE_REGISTRATION (CronTest1);
 
-void PageTest::setUp (void)
+void CronTest1::setUp (void)
 {
 }
 
-void PageTest::tearDown (void)
+void CronTest1::tearDown (void)
 {
   
 }
 
-void PageTest::myTest (void)
+void CronTest1::myTest (void)
 {
 }
 
