@@ -67,7 +67,13 @@ public:
 
   void setMinuteList (std::list <Minute> minuteList);
 
-  void calcNextHit ();
+  DateTime calcNextHit ();
+
+  /*!
+   * This function allows to set another current reference time.
+   * Currently used to enable unit testing.
+   */
+  void setCurrentDateTime (DateTime current);
   
 private:
   static const int MaxYearDiff = 2000;

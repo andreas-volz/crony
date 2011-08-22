@@ -59,8 +59,8 @@ double secondsToHour (int hour)
     diff = alarm - dt;
   }
 
-  dt.dump ();
-  alarm.dump ();
+  cout << dt << endl;
+  cout << alarm << endl;
   
   return diff;  
 }

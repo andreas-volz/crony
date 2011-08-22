@@ -42,7 +42,7 @@ void Cron::setMinuteList (std::list <Minute> minuteList)
   mMinuteList = minuteList;
 }
 
-void Cron::calcNextHit ()
+DateTime Cron::calcNextHit ()
 {
   // always hit at second at "0"
   mAlarm.setSeconds (0);
@@ -55,7 +55,8 @@ void Cron::calcNextHit ()
   if ((mDayOfWeekList.size () == 0) && (mDayOfMonthList.size () == 0))
   {
     cerr << "match all '*' not allowed for both of dayofweek and dayofmonth" << endl;
-    return;
+    //assert (false);
+    //return;
   }
 
   //checkDayOfWeek ();
@@ -70,11 +71,17 @@ void Cron::calcNextHit ()
   checkMinute ();
   
 
-  cout << "Current:" << endl;
-  mCurrent.dump ();
+  //cout << "Current:" << endl << mCurrent << endl;
+  //mCurrent.dump ();
 
-  cout << "mAlarm:" << endl;
-  mAlarm.dump ();
+  //cout << "mAlarm:" << endl << mAlarm << endl;
+  //.dump ();
+
+
+  // TODO: design this that calc is not so danger to forget...!
+  mAlarm.calculate (); 
+  
+  return mAlarm;
 }
 
 void Cron::checkYear (bool recheck)
@@ -102,14 +109,14 @@ void Cron::checkYear (bool recheck)
     {
       Year year = *y_it;
 
-      Year tmp = year - (mCurrent.getYear () + 1900); // convert to struct tm format
+      Year tmp = year - (mCurrent.getYear () + DateTime::YearShift); // convert to struct tm format
 
       // check for nearest value above
       if ((tmp >= 0) && (tmp <= yearDiff))
       {
         if (recheck)
         {
-          if (year > (mCurrent.getYear () + 1900))
+          if (year > (mCurrent.getYear () + DateTime::YearShift))
           {
             yearDiff = tmp;
           }
@@ -400,4 +407,9 @@ void Cron::checkMinute (bool recheck)
       mAlarm.setMinutes (mCurrent.getMinutes () + minuteDiff);
     }
   }
+}
+
+void Cron::setCurrentDateTime (DateTime current)
+{
+  mCurrent = current;
 }
