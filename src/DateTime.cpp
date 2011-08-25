@@ -9,7 +9,6 @@ DateTime::DateTime ()
 {  
   // initialize each new DateTime to current system time
   current ();
-  calculate ();
 }
 
 void DateTime::current ()
@@ -17,15 +16,16 @@ void DateTime::current ()
   time (&mRawtime);
   
   localtime_r (&mRawtime, &mTime);
+
+  calculate ();
 }
 
 void DateTime::calculate ()
 {
   mRawtime = mktime (&mTime);
-  cout << mRawtime << endl;
 }
 
-int DateTime::getSeconds ()
+int DateTime::getSeconds () const
 {
   return mTime.tm_sec;
 }
@@ -33,9 +33,10 @@ int DateTime::getSeconds ()
 void DateTime::setSeconds (int sec)
 {
   mTime.tm_sec = sec;
+  calculate ();
 }
 
-int DateTime::getMinutes ()
+int DateTime::getMinutes () const
 {
   return mTime.tm_min;
 }
@@ -43,9 +44,10 @@ int DateTime::getMinutes ()
 void DateTime::setMinutes (int min)
 {
   mTime.tm_min = min;
+  calculate ();
 }
 
-int DateTime::getHours ()
+int DateTime::getHours () const
 {
   return mTime.tm_hour;
 }
@@ -53,9 +55,10 @@ int DateTime::getHours ()
 void DateTime::setHours (int hour)
 {
   mTime.tm_hour = hour;
+  calculate ();
 }
 
-int DateTime::getDayOfMonth ()
+int DateTime::getDayOfMonth () const
 {
   return mTime.tm_mday;
 }
@@ -63,9 +66,10 @@ int DateTime::getDayOfMonth ()
 void DateTime::setDayOfMonth (int mday)
 {
   mTime.tm_mday = mday;
+  calculate ();
 }
 
-int DateTime::getMonth ()
+int DateTime::getMonth () const
 {
   return mTime.tm_mon;
 }
@@ -73,9 +77,10 @@ int DateTime::getMonth ()
 void DateTime::setMonth (int mon)
 {
   mTime.tm_mon = mon;
+  calculate ();
 }
 
-int DateTime::getYear ()
+int DateTime::getYear () const
 {
   return mTime.tm_year;
 }
@@ -83,9 +88,10 @@ int DateTime::getYear ()
 void DateTime::setYear (int year)
 {
   mTime.tm_year = year;
+  calculate ();
 }
 
-bool DateTime::getDaylightSaving ()
+bool DateTime::getDaylightSaving () const
 {
   return mTime.tm_isdst;
 }
@@ -93,16 +99,17 @@ bool DateTime::getDaylightSaving ()
 void DateTime::setDayLightSaving (bool isdst)
 {
   mTime.tm_isdst = isdst;
+  calculate ();
 }
 
 //0-6
-int DateTime::getDayOfWeek ()
+int DateTime::getDayOfWeek () const
 {
   return mTime.tm_wday;
 }
 
 //0-365
-int DateTime::getDayOfYear ()
+int DateTime::getDayOfYear () const
 {
   return mTime.tm_yday;
 }
@@ -112,7 +119,6 @@ time_t DateTime::getTimestamp () const
   return mRawtime;
 }
 
-// TODO: implement << operator
 void DateTime::dump (std::ostringstream &outStream) const
 {
   outStream  << "tm_sec: "   << mTime.tm_sec << endl
@@ -127,9 +133,9 @@ void DateTime::dump (std::ostringstream &outStream) const
              << "rawtime: "  << mRawtime << endl;
 }
 
-double DateTime::operator - (const DateTime &dt)
+double DateTime::operator - (const DateTime &dt) const
 {
-  return difftime (mRawtime, dt.mRawtime);
+  return difftime (getTimestamp (), dt.getTimestamp ());
 }
 
 bool operator == (const DateTime &dt1, const DateTime &dt2)
@@ -147,12 +153,3 @@ std::ostream &operator << (std::ostream &s, const DateTime &dt)
 
   return s;
 }
-
-DateTime &DateTime::operator = (const DateTime &dt)
-{
-  mTime = dt.mTime;
-  mRawtime = dt.mRawtime;
-  
-  return *this;
-}
-

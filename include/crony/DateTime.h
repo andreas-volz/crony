@@ -45,52 +45,50 @@ public:
   // member functions
   void current ();
 
-  void calculate ();
-
   //0-59
-  int getSeconds ();
+  int getSeconds () const;
   void setSeconds (int sec);
 
   //0-59
-  int getMinutes ();
+  int getMinutes () const;
   void setMinutes (int min);
 
   //0-23
-  int getHours ();
+  int getHours () const;
   void setHours (int hour);
 
   //1-31
-  int getDayOfMonth ();
+  int getDayOfMonth () const;
   void setDayOfMonth (int mday);
 
   //0-11
-  int getMonth ();
+  int getMonth () const;
   void setMonth (int mon);
 
   // -1900 !!
-  int getYear ();
+  int getYear () const;
   void setYear (int year);
   
-  bool getDaylightSaving ();
+  bool getDaylightSaving () const;
   void setDayLightSaving (bool isdst);
 
   // get only -> see 'enum WeekDay'
-  int getDayOfWeek ();
+  int getDayOfWeek () const;
 
   // get only
-  int getDayOfYear ();
+  int getDayOfYear () const;
 
   time_t getTimestamp () const;
 
   // operators
   
-  double operator - (const DateTime &dt);
+  double operator - (const DateTime &dt) const;
 
   friend std::ostream &operator << (std::ostream &s, const DateTime &dt);
-
-  DateTime &operator = (const DateTime &dt);
   
 private:
+  void calculate ();
+  
   void dump (std::ostringstream &outStream) const;
   
   struct tm mTime;

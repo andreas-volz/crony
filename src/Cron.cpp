@@ -70,24 +70,11 @@ DateTime Cron::calcNextHit ()
   
   checkMinute ();
   
-
-  //cout << "Current:" << endl << mCurrent << endl;
-  //mCurrent.dump ();
-
-  //cout << "mAlarm:" << endl << mAlarm << endl;
-  //.dump ();
-
-
-  // TODO: design this that calc is not so danger to forget...!
-  mAlarm.calculate (); 
-  
   return mAlarm;
 }
 
 void Cron::checkYear (bool recheck)
 {
-  mAlarm.calculate ();
-  
   // hit all years (*)
   if (mYearList.size () == 0)
   {
@@ -141,9 +128,7 @@ void Cron::checkYear (bool recheck)
 }
 
 void Cron::checkMonth (bool recheck)
-{
-  mAlarm.calculate ();
-  
+{  
   // hit all months (*)
   if (mMonthList.size () == 0)
   {
@@ -205,8 +190,6 @@ void Cron::checkMonth (bool recheck)
 
 void Cron::checkDayOfWeek (bool recheck)
 {
-  mAlarm.calculate ();
-  
  /* // first check for day of week and then...
   if (mDayOfWeekList.size () == 0)
   {
@@ -223,8 +206,6 @@ void Cron::checkDayOfWeek (bool recheck)
 
 void Cron::checkDayOfMonth (bool recheck)
 {
-  mAlarm.calculate ();
-  
   // hit all months (*)
   if (mDayOfMonthList.size () == 0)
   {
@@ -285,8 +266,6 @@ void Cron::checkDayOfMonth (bool recheck)
 
 void Cron::checkHour (bool recheck)
 {
-  mAlarm.calculate ();
-  
   // hit each hour (*)
   if (mHourList.size () == 0)
   {
@@ -349,8 +328,6 @@ void Cron::checkHour (bool recheck)
 
 void Cron::checkMinute (bool recheck)
 {
-  mAlarm.calculate ();
-  
   // hit each minute (*)
   if (mMinuteList.size () == 0)
   {

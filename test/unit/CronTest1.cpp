@@ -10,7 +10,6 @@ void CronTest1::setUp (void)
   mdtReference.setHours (11);
   mdtReference.setMinutes (0);
   mdtReference.setSeconds (0);
-  mdtReference.calculate ();
   //cout << "mdtReference: " << endl << mdtReference << endl;
 }
 
@@ -27,8 +26,7 @@ void CronTest1::test1 (void)
 
   alarmExpect = mdtReference;
   alarmExpect.setYear (mdtReference.getYear () + 1);
-  alarmExpect.calculate ();  
-
+  
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Year> yearList;
@@ -48,7 +46,6 @@ void CronTest1::test2 (void)
 
   alarmExpect = mdtReference;
   alarmExpect.setMonth (mdtReference.getMonth () + 1);
-  alarmExpect.calculate ();  
 
   cron1.setCurrentDateTime (mdtReference);
 

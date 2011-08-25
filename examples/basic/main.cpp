@@ -47,7 +47,6 @@ double secondsToHour (int hour)
   alarm.setHours (hour);
   alarm.setMinutes (0);
   alarm.setSeconds (0);
-  alarm.calculate ();
 
   diff = alarm - dt;
 
@@ -55,7 +54,6 @@ double secondsToHour (int hour)
   {
     // increment alarm day because must be on next morning
     alarm.setDayOfMonth (alarm.getDayOfMonth () + 1);
-    alarm.calculate ();
     diff = alarm - dt;
   }
 
