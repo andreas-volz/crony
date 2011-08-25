@@ -12,32 +12,32 @@ Cron::Cron ()
 {
 }
 
-void Cron::setYearList (std::list <Year> yearList)
+void Cron::setYearList (const std::list <Year> &yearList)
 {
   mYearList = yearList;
 }
 
-void Cron::setDayOfWeekList (std::list <DayOfWeek> dayOfWeekList)
+void Cron::setDayOfWeekList (const std::list <DayOfWeek> &dayOfWeekList)
 {
   mDayOfWeekList = dayOfWeekList;
 }
 
-void Cron::setMonthList (std::list <Month> monthList)
+void Cron::setMonthList (const std::list <Month> &monthList)
 {
   mMonthList = monthList;
 }
 
-void Cron::setDayOfMonthList (std::list <DayOfMonth> dayOfMonthList)
+void Cron::setDayOfMonthList (const std::list <DayOfMonth> &dayOfMonthList)
 {
   mDayOfMonthList = dayOfMonthList;
 }
 
-void Cron::setHourList (std::list <Hour> hourList)
+void Cron::setHourList (const std::list <Hour> &hourList)
 {
   mHourList = hourList;
 }
 
-void Cron::setMinuteList (std::list <Minute> minuteList)
+void Cron::setMinuteList (const std::list <Minute> &minuteList)
 {
   mMinuteList = minuteList;
 }

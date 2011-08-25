@@ -55,17 +55,17 @@ public:
   Cron ();
 
   // TODO: all const reference parameters
-  void setYearList (std::list <Year> yearList);
+  void setYearList (const std::list <Year> &yearList);
 
-  void setDayOfWeekList (std::list <DayOfWeek> dayOfWeekList);
+  void setDayOfWeekList (const std::list <DayOfWeek> &dayOfWeekList);
   
-  void setMonthList (std::list <Month> monthList);
+  void setMonthList (const std::list <Month> &monthList);
 
-  void setDayOfMonthList (std::list <DayOfMonth> dayOfMonthList);
+  void setDayOfMonthList (const std::list <DayOfMonth> &dayOfMonthList);
 
-  void setHourList (std::list <Hour> hourList);
+  void setHourList (const std::list <Hour> &hourList);
 
-  void setMinuteList (std::list <Minute> minuteList);
+  void setMinuteList (const std::list <Minute> &minuteList);
 
   DateTime calcNextHit ();
 
