@@ -30,7 +30,7 @@ void CronTest1::test1 (void)
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Year> yearList;
-  yearList.push_back (mdtReference.getYear () + 1 + DateTime::YearShift);
+  yearList.push_back (mdtReference.getYear () + DateTime::YearShift + 1);
   cron1.setYearList (yearList);
 
   alarmCalc = cron1.calcNextHit ();
@@ -129,7 +129,47 @@ void CronTest1::test6 (void)
 
   cron1.setCurrentDateTime (mdtReference);
 
-  std::list <Hour> minuteList;
+  std::list <Minute> minuteList;
+  minuteList.push_back (mdtReference.getMinutes () + 1);
+  cron1.setMinuteList (minuteList);
+
+  alarmCalc = cron1.calcNextHit ();
+
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
+
+void CronTest1::test7 (void)
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setYear (mdtReference.getYear () + 1);
+  alarmExpect.setMonth (mdtReference.getMonth () + 1);
+  alarmExpect.setDayOfMonth (mdtReference.getDayOfMonth () + 1);
+  alarmExpect.setHours (alarmExpect.getHours () + 1);
+  alarmExpect.setMinutes (alarmExpect.getMinutes () + 1);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <Year> yearList;
+  yearList.push_back (mdtReference.getYear () + DateTime::YearShift + 1);
+  cron1.setYearList (yearList);
+
+  std::list <Month> monthList;
+  monthList.push_back (mdtReference.getMonth () + 1 + 1); // +1 for time format...
+  cron1.setMonthList (monthList);
+
+  std::list <DayOfMonth> dayOfMonthList;
+  dayOfMonthList.push_back (mdtReference.getDayOfMonth () + 1);
+  cron1.setDayOfMonthList (dayOfMonthList);
+
+  std::list <Hour> hourList;
+  hourList.push_back (mdtReference.getHours () + 1);
+  cron1.setHourList (hourList);
+  
+  std::list <Minute> minuteList;
   minuteList.push_back (mdtReference.getMinutes () + 1);
   cron1.setMinuteList (minuteList);
 

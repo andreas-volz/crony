@@ -19,8 +19,8 @@ typedef int Minute;
 /*! 
  * http://en.wikipedia.org/wiki/Cron
  
- *    *    *    *    *  command to be executed
-┬    ┬    ┬    ┬    ┬
+ *    *    *    *    *   * command to be executed
+┬    ┬    ┬    ┬    ┬    \ year
 │    │    │    │    │
 │    │    │    │    │
 │    │    │    │    └───── day of week (0 - 7) (Sunday=0 or 7)
