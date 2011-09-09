@@ -21,6 +21,19 @@ class CronTest1 : public CPPUNIT_NS::TestFixture
 
   // hit one month in future
   CPPUNIT_TEST (test2);
+
+  // hit one day of month in future
+  CPPUNIT_TEST (test3);
+
+  // hit  one day in week in future
+  // FIXME
+  //CPPUNIT_TEST (test4);
+
+  // hit one hour in future
+  CPPUNIT_TEST (test5);
+
+  // hit one minute in future
+  CPPUNIT_TEST (test6);
   
   CPPUNIT_TEST_SUITE_END ();
 
@@ -31,6 +44,10 @@ public:
 protected:
   void test1 (void);
   void test2 (void);
+  void test3 (void);
+  void test4 (void);
+  void test5 (void);
+  void test6 (void);
 
 private:
   DateTime mdtReference;

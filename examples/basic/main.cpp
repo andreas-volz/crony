@@ -87,7 +87,7 @@ int main (int argc, const char **argv)
   }
   else
   {
-    std::list <DayOfWeek> dayOfMonthList;
+    std::list <DayOfMonth> dayOfMonthList;
     dayOfMonthList.push_back (21);
     dayOfMonthList.push_back (7);
     dayOfMonthList.push_back (2);

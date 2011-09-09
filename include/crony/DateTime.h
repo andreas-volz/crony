@@ -11,7 +11,7 @@ class DateTime
 public:
   enum WeekDay
   {
-    Sunday,
+    Sunday = 0,
     Monday,
     Tuesday,
     Wednesday,

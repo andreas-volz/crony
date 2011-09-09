@@ -35,7 +35,7 @@ void CronTest1::test1 (void)
 
   alarmCalc = cron1.calcNextHit ();
 
-  CPPUNIT_ASSERT_EQUAL (alarmCalc, alarmExpect);
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
 void CronTest1::test2 (void)
@@ -50,11 +50,90 @@ void CronTest1::test2 (void)
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Month> monthList;
-  monthList.push_back (mdtReference.getMonth () + 1 + 1);
+  monthList.push_back (mdtReference.getMonth () + 1 + 1); // +1 for time format...
   cron1.setMonthList (monthList);
 
   alarmCalc = cron1.calcNextHit ();
 
-  CPPUNIT_ASSERT_EQUAL (alarmCalc, alarmExpect);
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
+void CronTest1::test3 (void)
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setDayOfMonth (mdtReference.getDayOfMonth () + 1);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <DayOfMonth> dayOfMonthList;
+  dayOfMonthList.push_back (mdtReference.getDayOfMonth () + 1);
+  cron1.setDayOfMonthList (dayOfMonthList);
+
+  alarmCalc = cron1.calcNextHit ();
+
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
+
+void CronTest1::test4 (void)
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () + (alarmExpect.getDayOfWeek () - mdtReference.getDayOfWeek () + 1));
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <DayOfWeek> dayOfWeekList;
+  dayOfWeekList.push_back (mdtReference.getDayOfWeek () + 1);
+  cron1.setDayOfWeekList (dayOfWeekList);
+
+  alarmCalc = cron1.calcNextHit ();
+
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
+
+void CronTest1::test5 (void)
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setHours (alarmExpect.getHours () + 1);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <Hour> hourList;
+  hourList.push_back (mdtReference.getHours () + 1);
+  cron1.setHourList (hourList);
+
+  alarmCalc = cron1.calcNextHit ();
+
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
+
+void CronTest1::test6 (void)
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setMinutes (alarmExpect.getMinutes () + 1);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <Hour> minuteList;
+  minuteList.push_back (mdtReference.getMinutes () + 1);
+  cron1.setMinuteList (minuteList);
+
+  alarmCalc = cron1.calcNextHit ();
+
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
