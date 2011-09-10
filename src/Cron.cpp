@@ -42,14 +42,16 @@ void Cron::setMinuteList (const std::list <Minute> &minuteList)
   mMinuteList = minuteList;
 }
 
-DateTime Cron::calcNextHit ()
+DateTime Cron::calcNextHit () const
 {
+  DateTime mAlarm;
+  
   // always hit at second at "0"
   mAlarm.setSeconds (0);
 
-  checkYear ();
+  checkYear (mAlarm);
 
-  checkMonth ();
+  checkMonth (mAlarm);
 
 
   if ((mDayOfWeekList.size () == 0) && (mDayOfMonthList.size () == 0))
@@ -59,21 +61,21 @@ DateTime Cron::calcNextHit ()
     //return;
   }
 
-  //checkDayOfWeek ();
+  //checkDayOfWeek (mAlarm);
 
-  checkDayOfMonth ();
+  checkDayOfMonth (mAlarm);
 
   // TODO: if dayofweek and dayofmonth are both * then abort
   // otherwise proceed with one of them
 
-  checkHour ();
+  checkHour (mAlarm);
   
-  checkMinute ();
+  checkMinute (mAlarm);
   
   return mAlarm;
 }
 
-void Cron::checkYear (bool recheck)
+void Cron::checkYear (DateTime &mAlarm, bool recheck) const
 {
   // hit all years (*)
   if (mYearList.size () == 0)
@@ -127,7 +129,7 @@ void Cron::checkYear (bool recheck)
   }
 }
 
-void Cron::checkMonth (bool recheck)
+void Cron::checkMonth (DateTime &mAlarm, bool recheck) const
 {  
   // hit all months (*)
   if (mMonthList.size () == 0)
@@ -143,7 +145,7 @@ void Cron::checkMonth (bool recheck)
 
     if (recheck)
     {
-      checkYear ();
+      checkYear (mAlarm);
     }
   }
   else
@@ -179,7 +181,7 @@ void Cron::checkMonth (bool recheck)
     {
       cout << "not possible to hit month in past: adding years" << endl;
       mAlarm.setMonth (*min_element (mMonthList.begin (), mMonthList.end ()));
-      checkYear (true);
+      checkYear (mAlarm, true);
     }
     else if (monthDiff > 0)
     {
@@ -188,7 +190,7 @@ void Cron::checkMonth (bool recheck)
   }
 }
 
-void Cron::checkDayOfWeek (bool recheck)
+void Cron::checkDayOfWeek (DateTime &mAlarm, bool recheck) const
 {
  /* // first check for day of week and then...
   if (mDayOfWeekList.size () == 0)
@@ -204,7 +206,7 @@ void Cron::checkDayOfWeek (bool recheck)
   }*/
 }
 
-void Cron::checkDayOfMonth (bool recheck)
+void Cron::checkDayOfMonth (DateTime &mAlarm, bool recheck) const
 {
   // hit all months (*)
   if (mDayOfMonthList.size () == 0)
@@ -220,7 +222,7 @@ void Cron::checkDayOfMonth (bool recheck)
 
     if (recheck)
     {
-      checkMonth ();
+      checkMonth (mAlarm);
     }
   }
   else
@@ -255,7 +257,7 @@ void Cron::checkDayOfMonth (bool recheck)
     {
       cout << "not possible to hit day of month in past: adding month" << endl;
       mAlarm.setDayOfMonth (*min_element (mDayOfMonthList.begin (), mDayOfMonthList.end ()));
-      checkMonth (true);
+      checkMonth (mAlarm, true);
     }
     else if (dayofmonthDiff > 0)
     {
@@ -264,7 +266,7 @@ void Cron::checkDayOfMonth (bool recheck)
   }
 }
 
-void Cron::checkHour (bool recheck)
+void Cron::checkHour (DateTime &mAlarm, bool recheck) const
 {
   // hit each hour (*)
   if (mHourList.size () == 0)
@@ -281,7 +283,7 @@ void Cron::checkHour (bool recheck)
     if (recheck)
     {
       // TODO: weekday or monthday??
-      checkDayOfMonth ();
+      checkDayOfMonth (mAlarm);
     }
   }
   else
@@ -317,7 +319,7 @@ void Cron::checkHour (bool recheck)
       cout << "not possible to hit hour in past: adding days" << endl;
       mAlarm.setHours (*min_element (mHourList.begin (), mHourList.end ()));
       // TODO: weekday or monthday??
-      checkDayOfMonth (true);
+      checkDayOfMonth (mAlarm, true);
     }
     else if (hourDiff > 0)
     {
@@ -326,7 +328,7 @@ void Cron::checkHour (bool recheck)
   }
 }
 
-void Cron::checkMinute (bool recheck)
+void Cron::checkMinute (DateTime &mAlarm, bool recheck) const
 {
   // hit each minute (*)
   if (mMinuteList.size () == 0)
@@ -342,7 +344,7 @@ void Cron::checkMinute (bool recheck)
 
     if (recheck)
     {
-      checkMinute ();
+      checkMinute (mAlarm);
     }
   }
   else
@@ -377,7 +379,7 @@ void Cron::checkMinute (bool recheck)
     {
       cout << "not possible to hit minute in past: adding minutes" << endl;
       mAlarm.setMinutes (*min_element (mMinuteList.begin (), mMinuteList.end ()));
-      checkHour (true);
+      checkHour (mAlarm, true);
     }
     else if (minuteDiff > 0)
     {

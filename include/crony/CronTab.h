@@ -1,7 +1,7 @@
 #ifndef CRON_TAB_H
 
 // STD
-#include <list>
+#include <map>
 
 // local
 #include "Cron.h"
@@ -15,7 +15,7 @@ public:
   void calcNextTimer ();
   
 private:
-  std::list <Cron> mTable;
+  std::map <time_t, Cron> mTable;
 };
 
 #endif // CRON_TAB_H

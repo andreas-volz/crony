@@ -11,6 +11,13 @@ DateTime::DateTime ()
   current ();
 }
 
+DateTime::DateTime (time_t rawtime)
+{
+  localtime_r (&rawtime, &mTime);
+
+  calculate ();
+}
+
 void DateTime::current ()
 {
   time (&mRawtime);

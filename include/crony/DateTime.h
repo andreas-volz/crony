@@ -42,6 +42,9 @@ public:
   // constructor
   DateTime ();
 
+  // constructor
+  DateTime (time_t rawtime);
+
   // member functions
   void current ();
 

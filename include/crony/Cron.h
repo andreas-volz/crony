@@ -78,7 +78,7 @@ public:
 
   void setMinuteList (const std::list <Minute> &minuteList);
 
-  DateTime calcNextHit ();
+  DateTime calcNextHit () const;
 
   /*!
    * This function allows to set another current reference time.
@@ -93,12 +93,12 @@ private:
   static const int MaxHourDiff = 24;
   static const int MaxMinuteDiff = 60;
   
-  void checkYear (bool recheck = false);
-  void checkMonth (bool recheck = false);
-  void checkDayOfWeek (bool recheck = false);
-  void checkDayOfMonth (bool recheck = false);
-  void checkHour (bool recheck = false);
-  void checkMinute (bool recheck = false);
+  void checkYear (DateTime &mAlarm, bool recheck = false) const;
+  void checkMonth (DateTime &mAlarm, bool recheck = false) const;
+  void checkDayOfWeek (DateTime &mAlarm, bool recheck = false) const;
+  void checkDayOfMonth (DateTime &mAlarm, bool recheck = false) const;
+  void checkHour (DateTime &mAlarm, bool recheck = false) const;
+  void checkMinute (DateTime &mAlarm, bool recheck = false) const;
   
   std::list <Year> mYearList;
   std::list <DayOfWeek> mDayOfWeekList;
@@ -108,7 +108,6 @@ private:
   std::list <Minute> mMinuteList;
 
   DateTime mCurrent;
-  DateTime mAlarm;
 };
 
 #endif // CRON_H
