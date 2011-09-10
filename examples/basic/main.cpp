@@ -38,6 +38,11 @@ void dumpSeconds (double seconds)
   cout << endl;
 }
 
+void onHit ()
+{
+  cout << "Hit!" << endl;
+}
+
 double secondsToHour (int hour)
 {
   DateTime dt;
@@ -118,6 +123,8 @@ int main (int argc, const char **argv)
 
   cronTab.add (cronWeekday);
 
+  cronTab.signalHit.connect (sigc::ptr_fun (onHit));
+
   // SA, SO
   /*Cron cronWeekend;
   std::list <DayOfWeek> dayOfWeekList2;
@@ -136,10 +143,7 @@ int main (int argc, const char **argv)
   cronTab.add (cronWeekend);*/
 
   cronTab.calcNextTimer ();
-  
-  return 1; // TMP
-
-  
+    
   // http://www.cplusplus.com/reference/clibrary/ctime/tm/
 
   /*cout << "secondsToNextHour: " << endl;

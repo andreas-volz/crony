@@ -27,6 +27,7 @@ AM_PROG_LIBTOOL
 
 
 PKG_CHECK_MODULES(UNIT, cppunit)
+PKG_CHECK_MODULES(SIGC, sigc++-2.0)
 AC_OUTPUT([
 Makefile
 examples/Makefile

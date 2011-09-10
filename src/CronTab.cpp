@@ -24,6 +24,7 @@ void CronTab::calcNextTimer ()
     cout << "Hit at: " << DateTime (timestamp) << endl;
 
     // hit some callback at timestamp
+    signalHit.emit ();
 
     mTable[cron.calcNextHit ().getTimestamp ()] = cron;
     mTable.erase (cr_it);    

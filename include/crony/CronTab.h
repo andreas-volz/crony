@@ -3,6 +3,9 @@
 // STD
 #include <map>
 
+// SIGC
+#include <sigc++/sigc++.h>
+
 // local
 #include "Cron.h"
 #include "DateTime.h"
@@ -13,6 +16,8 @@ public:
   void add (const Cron &cron);
 
   void calcNextTimer ();
+
+  sigc::signal<void> signalHit;
   
 private:
   std::map <time_t, Cron> mTable;
