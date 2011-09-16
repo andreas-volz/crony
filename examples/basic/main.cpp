@@ -93,19 +93,19 @@ int main (int argc, const char **argv)
   else
   {
     std::list <DayOfMonth> dayOfMonthList;
-    dayOfMonthList.push_back (21);
+    dayOfMonthList.push_back (16);
     dayOfMonthList.push_back (7);
     dayOfMonthList.push_back (2);
     cronWeekday.setDayOfMonthList (dayOfMonthList);
   }
 
   std::list <Hour> hourList;
-  hourList.push_back (2);
+  hourList.push_back (22);
   cronWeekday.setHourList (hourList);
 
   std::list <Minute> minuteList;
-  minuteList.push_back (5);
-  minuteList.push_back (45);
+  minuteList.push_back (28);
+  minuteList.push_back (55);
   cronWeekday.setMinuteList (minuteList);
 
   std::list <Month> monthList;
@@ -114,11 +114,7 @@ int main (int argc, const char **argv)
   cronWeekday.setMonthList (monthList);
   
   std::list <Year> yearList;
-  yearList.push_back (2010);
-  //yearList.push_back (2011);
-  //yearList.push_back (2012);
   yearList.push_back (2013);
-  //yearList.push_back (2012);
   cronWeekday.setYearList (yearList);
 
   cronTab.add (cronWeekday);
@@ -142,7 +138,11 @@ int main (int argc, const char **argv)
   
   cronTab.add (cronWeekend);*/
 
-  cronTab.calcNextTimer ();
+  for (;;)
+  {
+    cronTab.calcNextTimer ();
+    sleep (5);
+  }
     
   // http://www.cplusplus.com/reference/clibrary/ctime/tm/
 

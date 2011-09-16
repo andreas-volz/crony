@@ -15,12 +15,12 @@ class CronTab
 public:
   void add (const Cron &cron);
 
-  void calcNextTimer ();
+  time_t calcNextTimer ();
 
   sigc::signal<void> signalHit;
   
 private:
-  std::map <time_t, Cron> mTable;
+  std::map <DateTime, Cron> mTable;
 };
 
 #endif // CRON_TAB_H

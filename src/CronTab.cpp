@@ -9,25 +9,34 @@ using namespace std;
 void CronTab::add (const Cron &cron)
 {
   // TODO: potential problem if two cron with same time...
-  mTable[cron.calcNextHit ().getTimestamp ()] = cron;
+  mTable[cron.calcNextHit ()] = cron;
 }
 
-void CronTab::calcNextTimer ()
+time_t CronTab::calcNextTimer ()
 {
-  map <time_t, Cron>::iterator cr_it = mTable.begin ();
+  map <DateTime, Cron>::iterator cr_it = mTable.begin ();
 
   if (cr_it != mTable.end ())
   {
-    time_t timestamp = cr_it->first;
-    Cron &cron = cr_it->second;
+    DateTime current;
+    DateTime hittime = cr_it->first;
+    Cron cron = cr_it->second;
     
-    cout << "Hit at: " << DateTime (timestamp) << endl;
+    cout << "Current: " << current << endl;
+    cout << "Hit at: " << hittime << endl;
 
+    if (hittime > current)
+    {
+      cout << "in future" << endl;
+      return hittime - current;
+    }
+    
     // hit some callback at timestamp
-    signalHit.emit ();
+    //signalHit.emit ();
 
-    mTable[cron.calcNextHit ().getTimestamp ()] = cron;
-    mTable.erase (cr_it);    
+    mTable.erase (cr_it);
+    mTable[cron.calcNextHit ()] = cron;
   }
-  
+
+  return 0;
 }

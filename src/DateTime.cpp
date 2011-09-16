@@ -160,3 +160,13 @@ std::ostream &operator << (std::ostream &s, const DateTime &dt)
 
   return s;
 }
+
+bool DateTime::operator < (const DateTime &dt) const
+{
+  return mRawtime < dt.mRawtime;
+}
+
+bool DateTime::operator > (const DateTime &dt) const
+{
+  return mRawtime > dt.mRawtime;
+}

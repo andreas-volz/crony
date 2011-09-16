@@ -37,4 +37,6 @@ include/crony/Makefile
 src/Makefile
 test/Makefile
 test/unit/Makefile
+crony.pc
+crony-uninstalled.pc
 ])

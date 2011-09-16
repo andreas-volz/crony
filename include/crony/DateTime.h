@@ -87,6 +87,10 @@ public:
   
   double operator - (const DateTime &dt) const;
 
+  bool operator < (const DateTime &dt) const;
+
+  bool operator > (const DateTime &dt) const;
+
   friend std::ostream &operator << (std::ostream &s, const DateTime &dt);
   
 private:
