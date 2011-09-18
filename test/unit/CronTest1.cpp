@@ -8,8 +8,8 @@ void CronTest1::setUp (void)
   mdtReference.setMonth (DateTime::April);
   mdtReference.setDayOfMonth (13);
   mdtReference.setHours (11);
-  mdtReference.setMinutes (0);
-  mdtReference.setSeconds (0);
+  mdtReference.setMinutes (10);
+  mdtReference.setSeconds (0); // 0 is important as Cron assumes always 0!
   //cout << "mdtReference: " << endl << mdtReference << endl;
 }
 
@@ -175,5 +175,26 @@ void CronTest1::test7 (void)
 
   alarmCalc = cron1.calcNextHit ();
 
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
+
+void CronTest1::test8 (void)
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setMinutes (alarmExpect.getMinutes () + 1);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <Minute> minuteList;
+  minuteList.push_back (mdtReference.getMinutes ());
+  minuteList.push_back (mdtReference.getMinutes () + 1);
+  cron1.setMinuteList (minuteList);
+
+  alarmCalc = cron1.calcNextHit ();
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
