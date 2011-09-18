@@ -34,8 +34,10 @@ time_t CronTab::calcNextTimer ()
     // hit some callback at timestamp
     //signalHit.emit ();
 
+    DateTime tmp = cron.calcNextHit ();
+    cout << "tmp: " << tmp << endl;
     mTable.erase (cr_it);
-    mTable[cron.calcNextHit ()] = cron;
+    mTable[tmp] = cron;
   }
 
   return 0;
