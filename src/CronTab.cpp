@@ -14,7 +14,27 @@ void CronTab::add (const Cron &cron)
 
 time_t CronTab::calcNextTimer ()
 {
-  map <DateTime, Cron>::iterator cr_it = mTable.begin ();
+  for (map <DateTime, Cron>::iterator cr_it = mTable.begin ();
+       cr_it != mTable.end ();
+       ++cr_it)
+  {
+    DateTime current;
+    DateTime keytime = cr_it->first;
+    Cron cron = cr_it->second;
+
+    cron.setCurrentDateTime (current);
+    DateTime hittime = cron.calcNextHit ();
+    cout << "Calc next hit: " << hittime << endl;
+    if (hittime > current)
+    {
+      mTable.erase (cr_it);
+      mTable[hittime] = cron;
+      return hittime - current;
+    }
+  }
+
+  
+  /*map <DateTime, Cron>::iterator cr_it = mTable.begin ();
 
   if (cr_it != mTable.end ())
   {
@@ -28,17 +48,20 @@ time_t CronTab::calcNextTimer ()
     if (hittime > current)
     {
       cout << "in future" << endl;
+
+      DateTime tmp = cron.calcNextHit ();
+      cout << "tmp: " << tmp << endl;
+      mTable.erase (cr_it);
+      mTable[tmp] = cron;
+        
       return hittime - current;
     }
     
     // hit some callback at timestamp
     //signalHit.emit ();
 
-    DateTime tmp = cron.calcNextHit ();
-    cout << "tmp: " << tmp << endl;
-    mTable.erase (cr_it);
-    mTable[tmp] = cron;
-  }
+
+  }*/
 
   return 0;
 }

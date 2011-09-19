@@ -19,7 +19,9 @@ lib_LTLIBRARIES = \
 libcrony_la_SOURCES = \
 	Cron.cpp     \
 	CronTab.cpp     \
-	DateTime.cpp
+	DateTime.cpp     \
+	CronExceptions.cpp     \
+	stringUtil.h
 
 libcrony_la_LIBADD = \
 	$(SIGC_LIBS)

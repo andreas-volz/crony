@@ -3,6 +3,7 @@
 
 // local
 #include "DateTime.h"
+#include "CronExceptions.h"
 
 // STD
 #include <stdint.h>

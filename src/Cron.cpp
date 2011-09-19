@@ -45,6 +45,7 @@ void Cron::setMinuteList (const std::list <Minute> &minuteList)
 DateTime Cron::calcNextHit () const
 {
   DateTime alarmTime;
+  alarmTime = mCurrent; // needed to realize other set time (e.g. for unit tests)
   
   // always hit at second at "0"
   alarmTime.setSeconds (0);
@@ -361,7 +362,7 @@ void Cron::checkMinute (DateTime &alarmTime, bool recheck) const
       // check for nearest value above
       if ((tmp >= 0) && (tmp <= minuteDiff))
       {
-        if (recheck)
+        if ((recheck) || (mCurrent.getHours () == alarmTime.getHours ()) )
         {
           if (minute > mCurrent.getMinutes ())
           {
@@ -377,7 +378,7 @@ void Cron::checkMinute (DateTime &alarmTime, bool recheck) const
 
     if (minuteDiff == MaxMinuteDiff)
     {
-      cout << "not possible to hit minute in past: adding minutes" << endl;
+      cout << "not possible to hit minute in past: adding hours" << endl;
       alarmTime.setMinutes (*min_element (mMinuteList.begin (), mMinuteList.end ()));
       checkHour (alarmTime, true);
     }

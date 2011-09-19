@@ -198,3 +198,31 @@ void CronTest1::test8 (void)
   
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
+
+void CronTest1::test9 (void)
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setMinutes (alarmExpect.getMinutes () - 1);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <Minute> minuteList;
+  minuteList.push_back (mdtReference.getMinutes ());
+  minuteList.push_back (mdtReference.getMinutes () + 1);
+  cron1.setMinuteList (minuteList);
+
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    CPPUNIT_ASSERT (false);
+  }
+  
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}

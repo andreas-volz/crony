@@ -2,7 +2,8 @@
 crony_HEADERS = \
 	Cron.h \
 	CronTab.h \
-	DateTime.h
+	DateTime.h \
+	CronExceptions.h
 
 cronydir = \
 	$(pkgincludedir)
