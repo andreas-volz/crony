@@ -41,6 +41,21 @@ class CronTest1 : public CPPUNIT_NS::TestFixture
 
   // don't hit anything, because minutes in past
   CPPUNIT_TEST (test9);
+
+  // don't hit anything, because hours in past
+  CPPUNIT_TEST (test10);
+
+  // don't hit anything, because dayofmonth in past
+  CPPUNIT_TEST (test11);
+
+  // don't hit anything, because dayofweek in past
+  //CPPUNIT_TEST (test12);
+
+  // don't hit anything, because month in past
+  CPPUNIT_TEST (test13);
+
+  // don't hit anything, because year in past
+  CPPUNIT_TEST (test14);
   
   CPPUNIT_TEST_SUITE_END ();
 
@@ -58,6 +73,11 @@ protected:
   void test7 (void);
   void test8 (void);
   void test9 (void);
+  void test10 (void);
+  void test11 (void);
+  //void test12 (void);
+  void test13 (void);
+  void test14 (void);
 
 private:
   crony::DateTime mdtReference;

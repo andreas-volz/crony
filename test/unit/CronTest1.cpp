@@ -209,14 +209,131 @@ void CronTest1::test9 (void)
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setMinutes (alarmExpect.getMinutes () - 5);
+  alarmExpect.setMinutes (alarmExpect.getMinutes () - 1);
 
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Minute> minuteList;
-  minuteList.push_back (mdtReference.getMinutes ());
-  minuteList.push_back (mdtReference.getMinutes () - 5);
+  minuteList.push_back (mdtReference.getMinutes () - 1);
   cron1.setMinuteList (minuteList);
+
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    // in this special unit test reaching the exception case is passed result...
+    return;
+  }
+
+  // if exception is not hit there's an error in the algorithm, because time is in past
+  CPPUNIT_ASSERT (false);
+}
+
+void CronTest1::test10 (void)
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setHours (alarmExpect.getHours () - 1);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <Hour> hourList;
+  hourList.push_back (mdtReference.getHours () - 1);
+  cron1.setHourList (hourList);
+
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    // in this special unit test reaching the exception case is passed result...
+    return;
+  }
+
+  // if exception is not hit there's an error in the algorithm, because time is in past
+  CPPUNIT_ASSERT (false);
+}
+
+void CronTest1::test11 (void)
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () - 1);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <DayOfMonth> dayofmonthList;
+  dayofmonthList.push_back (mdtReference.getDayOfMonth () - 1);
+  cron1.setDayOfMonthList (dayofmonthList);
+
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    // in this special unit test reaching the exception case is passed result...
+    return;
+  }
+
+  // if exception is not hit there's an error in the algorithm, because time is in past
+  CPPUNIT_ASSERT (false);
+}
+
+// test12 placeholder (dayofweek)...
+
+void CronTest1::test13 (void)
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setMonth (alarmExpect.getMonth () - 1);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <Month> monthList;
+  monthList.push_back (mdtReference.getMonth () - 1);
+  cron1.setMonthList (monthList);
+
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    // in this special unit test reaching the exception case is passed result...
+    return;
+  }
+
+  // if exception is not hit there's an error in the algorithm, because time is in past
+  CPPUNIT_ASSERT (false);
+}
+
+void CronTest1::test14 (void)
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setYear (alarmExpect.getYear () - 1);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <Year> yearList;
+  yearList.push_back (mdtReference.getYear () - 1);
+  cron1.setYearList (yearList);
 
   try
   {

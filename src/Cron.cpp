@@ -70,7 +70,7 @@ DateTime Cron::calcNextHit () const
         result = checkYear (alarmTime, checkedYear);
 
         // set variables for next run
-        checkedYear = false;
+        checkedYear = true;
         checkedMonth = false;
         checkedDayOfMonth = false;
         checkedHour = false;
@@ -83,6 +83,11 @@ DateTime Cron::calcNextHit () const
       {
         result = checkMonth (alarmTime, checkedMonth);
 
+        if (!result && checkedYear)
+        {
+          throw CronInPastException ();
+        }
+        
         // set variables for next run
         step = StepYear;
         checkedYear = true;
@@ -101,6 +106,11 @@ DateTime Cron::calcNextHit () const
       {
         result = checkDayOfMonth (alarmTime, checkedDayOfMonth); // TODO: checkDayOfWeek
 
+        if (!result && checkedYear && checkedMonth)
+        {
+          throw CronInPastException ();
+        }
+        
         // set variables for next run
         step = StepMonth;
         checkedYear = true;
@@ -118,6 +128,11 @@ DateTime Cron::calcNextHit () const
       case StepHour:
       {
         result = checkHour (alarmTime, checkedHour);
+
+        if (!result && checkedYear && checkedMonth && checkedDayOfMonth)
+        {
+          throw CronInPastException ();
+        }
         
         step = StepDayOfMonth;
         checkedYear = true;
@@ -136,7 +151,7 @@ DateTime Cron::calcNextHit () const
       {
         result = checkMinute (alarmTime, checkedMinute);
 
-        if (!result && checkedYear && checkedMonth && checkedDayOfMonth)
+        if (!result && checkedYear && checkedMonth && checkedDayOfMonth && checkedHour)
         {
           throw CronInPastException ();
         }
