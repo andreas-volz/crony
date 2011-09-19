@@ -11,7 +11,7 @@
 
 using namespace std;
 
-//namespace pluxx {
+namespace crony {
 
 const char* CronInPastException::what () const throw ()
 {
@@ -21,4 +21,4 @@ const char* CronInPastException::what () const throw ()
 }
 
 
-//} // end namespace pluxx
+} // end namespace crony

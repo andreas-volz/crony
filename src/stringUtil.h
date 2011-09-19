@@ -7,7 +7,7 @@
 #include <iomanip>
 #include <iostream>
 
-//namespace pluxx {
+namespace crony {
 
 /// create std::string from any number
 template <typename T>
@@ -18,6 +18,6 @@ std::string toString (const T &thing, int w = 0, int p = 0)
   return os.str();
 }
 
-//} // end namespace pluxx
+} // end namespace crony
 
 #endif	// STRING_UTIL_H

@@ -6,6 +6,8 @@
 
 using namespace std;
 
+namespace crony {
+
 void CronTab::add (const Cron &cron)
 {
   // TODO: potential problem if two cron with same time...
@@ -65,3 +67,5 @@ time_t CronTab::calcNextTimer ()
 
   return 0;
 }
+
+} // end namespace crony

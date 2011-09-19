@@ -10,8 +10,6 @@
 // local
 #include "crony/Cron.h"
 
-using namespace std;
-
 class CronTest1 : public CPPUNIT_NS::TestFixture
 {
   CPPUNIT_TEST_SUITE (CronTest1);
@@ -62,7 +60,7 @@ protected:
   void test9 (void);
 
 private:
-  DateTime mdtReference;
+  crony::DateTime mdtReference;
 };
 
 #endif // CRONTEST1_H

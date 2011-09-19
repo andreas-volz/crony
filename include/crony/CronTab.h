@@ -10,6 +10,8 @@
 #include "Cron.h"
 #include "DateTime.h"
 
+namespace crony {
+
 class CronTab
 {
 public:
@@ -22,5 +24,7 @@ public:
 private:
   std::map <DateTime, Cron> mTable;
 };
+
+} // end namespace crony
 
 #endif // CRON_TAB_H

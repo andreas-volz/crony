@@ -13,6 +13,7 @@
 #include "crony/CronTab.h"
 
 using namespace std;
+using namespace crony;
 
 void dumpTime (tm *ptm);
 

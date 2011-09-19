@@ -5,6 +5,8 @@
 
 using namespace std;
 
+namespace crony {
+
 DateTime::DateTime ()
 {  
   // initialize each new DateTime to current system time
@@ -170,3 +172,5 @@ bool DateTime::operator > (const DateTime &dt) const
 {
   return mRawtime > dt.mRawtime;
 }
+
+} // end namespace crony

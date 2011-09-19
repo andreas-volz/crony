@@ -1,5 +1,8 @@
 #include "CronTest1.h"
 
+using namespace std;
+using namespace crony;
+
 CPPUNIT_TEST_SUITE_REGISTRATION (CronTest1);
 
 void CronTest1::setUp (void)

@@ -10,6 +10,8 @@
 #include <list>
 #include <string>
 
+namespace crony {
+
 typedef int Year;
 typedef int DayOfWeek;
 typedef int Month;
@@ -110,5 +112,7 @@ private:
 
   DateTime mCurrent;
 };
+
+} // end namespace crony
 
 #endif // CRON_H

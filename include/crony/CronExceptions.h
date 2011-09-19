@@ -5,7 +5,7 @@
 #include <string>
 #include <exception>
 
-//namespace pluxx {
+namespace crony {
 
 class CronInPastException : public std::exception
 {
@@ -20,6 +20,6 @@ private:
 };
 
 
-//} // end namespace pluxx
+} // end namespace crony
 
 #endif // CRON_EXCEPTIONS_H

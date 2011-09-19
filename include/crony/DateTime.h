@@ -6,6 +6,8 @@
 
 // TODO: think about recalculation flag...
 
+namespace crony {
+
 class DateTime
 {
 public:
@@ -107,5 +109,7 @@ private:
 std::ostream &operator << (std::ostream &s, const DateTime &dt);
 
 bool operator == (const DateTime &dt, const DateTime &dt2);
+
+} // end namespace crony
 
 #endif // DATE_TIME_H

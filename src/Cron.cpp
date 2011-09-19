@@ -8,6 +8,8 @@
 
 using namespace std;
 
+namespace crony {
+
 Cron::Cron ()
 {
 }
@@ -393,3 +395,5 @@ void Cron::setCurrentDateTime (DateTime current)
 {
   mCurrent = current;
 }
+
+} // end namespace crony
