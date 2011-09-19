@@ -65,6 +65,15 @@ public:
     November,
     December
   };
+
+  enum CronSteps
+  {
+    StepYear,
+    StepMonth,
+    StepDayOfMonth,
+    StepHour,
+    StepMinute
+  };
   
   Cron ();
 
@@ -96,12 +105,12 @@ private:
   static const int MaxHourDiff = 24;
   static const int MaxMinuteDiff = 60;
   
-  void checkYear (DateTime &mAlarm, bool recheck = false) const;
-  void checkMonth (DateTime &mAlarm, bool recheck = false) const;
-  void checkDayOfWeek (DateTime &mAlarm, bool recheck = false) const;
-  void checkDayOfMonth (DateTime &mAlarm, bool recheck = false) const;
-  void checkHour (DateTime &mAlarm, bool recheck = false) const;
-  void checkMinute (DateTime &mAlarm, bool recheck = false) const;
+  bool checkYear (DateTime &mAlarm, bool recheck = false) const;
+  bool checkMonth (DateTime &mAlarm, bool recheck = false) const;
+  bool checkDayOfWeek (DateTime &mAlarm, bool recheck = false) const;
+  bool checkDayOfMonth (DateTime &mAlarm, bool recheck = false) const;
+  bool checkHour (DateTime &mAlarm, bool recheck = false) const;
+  bool checkMinute (DateTime &mAlarm, bool recheck = false) const;
   
   std::list <Year> mYearList;
   std::list <DayOfWeek> mDayOfWeekList;

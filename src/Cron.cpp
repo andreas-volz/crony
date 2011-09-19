@@ -52,34 +52,112 @@ DateTime Cron::calcNextHit () const
   // always hit at second at "0"
   alarmTime.setSeconds (0);
 
-  checkYear (alarmTime);
-
-  checkMonth (alarmTime);
-
-
-  if ((mDayOfWeekList.size () == 0) && (mDayOfMonthList.size () == 0))
+  bool result = false;
+  int step = StepYear;
+  
+  bool checkedYear = false;
+  bool checkedMonth = false;
+  bool checkedDayOfMonth = false;
+  bool checkedHour = false;
+  bool checkedMinute = false;
+  
+  while (!result)
   {
-    cerr << "match all '*' not allowed for both of dayofweek and dayofmonth" << endl;
-    //assert (false);
-    //return;
+    switch (step)
+    {
+      case StepYear:
+      {
+        result = checkYear (alarmTime, checkedYear);
+
+        // set variables for next run
+        checkedYear = false;
+        checkedMonth = false;
+        checkedDayOfMonth = false;
+        checkedHour = false;
+        checkedMinute = false;
+
+        if (!result) throw CronInPastException ();
+      }
+        
+      case StepMonth:
+      {
+        result = checkMonth (alarmTime, checkedMonth);
+
+        // set variables for next run
+        step = StepYear;
+        checkedYear = true;
+        checkedMonth = false;
+        checkedDayOfMonth = false;
+        checkedHour = false;
+        checkedMinute = false;
+
+        if (!result) 
+        {
+          continue;
+        }
+      }
+        
+      case StepDayOfMonth:
+      {
+        result = checkDayOfMonth (alarmTime, checkedDayOfMonth); // TODO: checkDayOfWeek
+
+        // set variables for next run
+        step = StepMonth;
+        checkedYear = true;
+        checkedMonth = true;
+        checkedDayOfMonth = false;
+        checkedHour = false;
+        checkedMinute = false;
+
+        if (!result) 
+        {
+          continue;
+        }
+      }
+        
+      case StepHour:
+      {
+        result = checkHour (alarmTime, checkedHour);
+        
+        step = StepDayOfMonth;
+        checkedYear = true;
+        checkedMonth = true;
+        checkedDayOfMonth = true;
+        checkedHour = false;
+        checkedMinute = false;
+        
+        if (!result) 
+        {
+          continue;
+        }
+      }
+        
+      case StepMinute:
+      {
+        result = checkMinute (alarmTime, checkedMinute);
+        
+        step = StepHour;
+        checkedYear = true;
+        checkedMonth = true;
+        checkedDayOfMonth = true;
+        checkedHour = true;
+        checkedMinute = false;
+        
+        if (!result) 
+        {
+          continue;
+        }
+      }
+    }
   }
 
-  //checkDayOfWeek (alarmTime);
-
-  checkDayOfMonth (alarmTime);
-
-  // TODO: if dayofweek and dayofmonth are both * then abort
-  // otherwise proceed with one of them
-
-  checkHour (alarmTime);
-  
-  checkMinute (alarmTime);
-  
   return alarmTime;
 }
 
-void Cron::checkYear (DateTime &alarmTime, bool recheck) const
+bool Cron::checkYear (DateTime &alarmTime, bool recheck) const
 {
+  bool result = true;
+  
   // hit all years (*)
   if (mYearList.size () == 0)
   {
@@ -108,7 +186,7 @@ void Cron::checkYear (DateTime &alarmTime, bool recheck) const
       {
         if (recheck)
         {
-          if (year > (mCurrent.getYear () + DateTime::YearShift))
+          if (year > (alarmTime.getYear () + DateTime::YearShift))
           {
             yearDiff = tmp;
           }
@@ -122,18 +200,26 @@ void Cron::checkYear (DateTime &alarmTime, bool recheck) const
 
     if (yearDiff == MaxYearDiff)
     {
-      cout << "not possible to hit year in past: no other possibility!" << endl;
-      return;
+      result = false; // year in past
     }
     else if (yearDiff > 0)
     {
       alarmTime.setYear (mCurrent.getYear () + yearDiff);
     }
+    else if (yearDiff < 0)
+    {
+      // should not happen; only to verify algorithm...
+      assert (false);
+    }
   }
+
+  return result;
 }
 
-void Cron::checkMonth (DateTime &alarmTime, bool recheck) const
+bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
 {  
+  bool result = true;
+  
   // hit all months (*)
   if (mMonthList.size () == 0)
   {
@@ -148,7 +234,8 @@ void Cron::checkMonth (DateTime &alarmTime, bool recheck) const
 
     if (recheck)
     {
-      checkYear (alarmTime);
+      //checkYear (alarmTime);
+      result = false;
     }
   }
   else
@@ -184,17 +271,22 @@ void Cron::checkMonth (DateTime &alarmTime, bool recheck) const
     {
       cout << "not possible to hit month in past: adding years" << endl;
       alarmTime.setMonth (*min_element (mMonthList.begin (), mMonthList.end ()));
-      checkYear (alarmTime, true);
+      //checkYear (alarmTime, true);
+      result = false;
     }
     else if (monthDiff > 0)
     {
       alarmTime.setMonth (mCurrent.getMonth () + monthDiff);
     }
   }
+
+  return result;
 }
 
-void Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
+bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
 {
+  bool result = true;
+  
  /* // first check for day of week and then...
   if (mDayOfWeekList.size () == 0)
   {
@@ -207,10 +299,14 @@ void Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
     
     // TODO: calc offset to monthday for next weekday hit...
   }*/
+
+  return result;
 }
 
-void Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
+bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
 {
+  bool result = true;
+  
   // hit all months (*)
   if (mDayOfMonthList.size () == 0)
   {
@@ -225,7 +321,8 @@ void Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
 
     if (recheck)
     {
-      checkMonth (alarmTime);
+      //checkMonth (alarmTime);
+      result = false;
     }
   }
   else
@@ -260,17 +357,22 @@ void Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
     {
       cout << "not possible to hit day of month in past: adding month" << endl;
       alarmTime.setDayOfMonth (*min_element (mDayOfMonthList.begin (), mDayOfMonthList.end ()));
-      checkMonth (alarmTime, true);
+      //checkMonth (alarmTime, true);
+      result = false;
     }
     else if (dayofmonthDiff > 0)
     {
       alarmTime.setDayOfMonth (mCurrent.getDayOfMonth () + dayofmonthDiff);
     }
   }
+
+  return result;
 }
 
-void Cron::checkHour (DateTime &alarmTime, bool recheck) const
+bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
 {
+  bool result = true;
+  
   // hit each hour (*)
   if (mHourList.size () == 0)
   {
@@ -286,7 +388,8 @@ void Cron::checkHour (DateTime &alarmTime, bool recheck) const
     if (recheck)
     {
       // TODO: weekday or monthday??
-      checkDayOfMonth (alarmTime);
+      //checkDayOfMonth (alarmTime);
+      result = false;
     }
   }
   else
@@ -322,17 +425,22 @@ void Cron::checkHour (DateTime &alarmTime, bool recheck) const
       cout << "not possible to hit hour in past: adding days" << endl;
       alarmTime.setHours (*min_element (mHourList.begin (), mHourList.end ()));
       // TODO: weekday or monthday??
-      checkDayOfMonth (alarmTime, true);
+      //checkDayOfMonth (alarmTime, true);
+      result = false;
     }
     else if (hourDiff > 0)
     {
       alarmTime.setHours (mCurrent.getHours () + hourDiff);
     }
   }
+
+  return result;
 }
 
-void Cron::checkMinute (DateTime &alarmTime, bool recheck) const
+bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
 {
+  bool result = true;
+  
   // hit each minute (*)
   if (mMinuteList.size () == 0)
   {
@@ -347,7 +455,8 @@ void Cron::checkMinute (DateTime &alarmTime, bool recheck) const
 
     if (recheck)
     {
-      checkMinute (alarmTime);
+      //checkMinute (alarmTime);
+      result = false;
     }
   }
   else
@@ -370,6 +479,10 @@ void Cron::checkMinute (DateTime &alarmTime, bool recheck) const
           {
             minuteDiff = tmp;
           }
+          else
+          {
+            cerr << "even after recheck not hit!" << endl;
+          }
         }
         else
         {
@@ -382,13 +495,16 @@ void Cron::checkMinute (DateTime &alarmTime, bool recheck) const
     {
       cout << "not possible to hit minute in past: adding hours" << endl;
       alarmTime.setMinutes (*min_element (mMinuteList.begin (), mMinuteList.end ()));
-      checkHour (alarmTime, true);
+      //checkHour (alarmTime, true);
+      result = false;
     }
     else if (minuteDiff > 0)
     {
       alarmTime.setMinutes (mCurrent.getMinutes () + minuteDiff);
     }
   }
+
+  return result;
 }
 
 void Cron::setCurrentDateTime (DateTime current)

@@ -40,7 +40,7 @@ class CronTest1 : public CPPUNIT_NS::TestFixture
   CPPUNIT_TEST (test8);
 
   // don't hit anything, because time in past
-  CPPUNIT_TEST (test9);
+  //CPPUNIT_TEST (test9);
   
   CPPUNIT_TEST_SUITE_END ();
 
