@@ -209,13 +209,13 @@ void CronTest1::test9 (void)
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setMinutes (alarmExpect.getMinutes () - 1);
+  alarmExpect.setMinutes (alarmExpect.getMinutes () - 5);
 
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Minute> minuteList;
   minuteList.push_back (mdtReference.getMinutes ());
-  minuteList.push_back (mdtReference.getMinutes () + 1);
+  minuteList.push_back (mdtReference.getMinutes () - 5);
   cron1.setMinuteList (minuteList);
 
   try
@@ -224,8 +224,10 @@ void CronTest1::test9 (void)
   }
   catch (CronInPastException ex)
   {
-    CPPUNIT_ASSERT (false);
+    // in this special unit test reaching the exception case is passed result...
+    return;
   }
-  
-  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+
+  // if exception is not hit there's an error in the algorithm, because time is in past
+  CPPUNIT_ASSERT (false);
 }

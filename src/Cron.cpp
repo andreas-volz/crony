@@ -135,6 +135,11 @@ DateTime Cron::calcNextHit () const
       case StepMinute:
       {
         result = checkMinute (alarmTime, checkedMinute);
+
+        if (!result && checkedYear && checkedMonth && checkedDayOfMonth)
+        {
+          throw CronInPastException ();
+        }
         
         step = StepHour;
         checkedYear = true;
@@ -478,10 +483,6 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
           if (minute > mCurrent.getMinutes ())
           {
             minuteDiff = tmp;
-          }
-          else
-          {
-            cerr << "even after recheck not hit!" << endl;
           }
         }
         else
