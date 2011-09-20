@@ -35,36 +35,6 @@ time_t CronTab::calcNextTimer ()
     }
   }
 
-  
-  /*map <DateTime, Cron>::iterator cr_it = mTable.begin ();
-
-  if (cr_it != mTable.end ())
-  {
-    DateTime current;
-    DateTime hittime = cr_it->first;
-    Cron cron = cr_it->second;
-    
-    cout << "Current: " << current << endl;
-    cout << "Hit at: " << hittime << endl;
-
-    if (hittime > current)
-    {
-      cout << "in future" << endl;
-
-      DateTime tmp = cron.calcNextHit ();
-      cout << "tmp: " << tmp << endl;
-      mTable.erase (cr_it);
-      mTable[tmp] = cron;
-        
-      return hittime - current;
-    }
-    
-    // hit some callback at timestamp
-    //signalHit.emit ();
-
-
-  }*/
-
   return 0;
 }
 

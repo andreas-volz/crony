@@ -23,7 +23,7 @@ class CronTest1 : public CPPUNIT_NS::TestFixture
   // hit one day of month in future
   CPPUNIT_TEST (test3);
 
-  // hit  one day in week in future
+  // hit  one dayofweek in future
   // FIXME
   //CPPUNIT_TEST (test4);
 

@@ -120,8 +120,6 @@ int main (int argc, const char **argv)
 
   cronTab.add (cronWeekday);
 
-  cronTab.signalHit.connect (sigc::ptr_fun (onHit));
-
   // SA, SO
   /*Cron cronWeekend;
   std::list <DayOfWeek> dayOfWeekList2;

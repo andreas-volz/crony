@@ -6,8 +6,7 @@ AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
-	$(EFL_CFLAGS) \
-	$(SIGC_CFLAGS)
+	$(EFL_CFLAGS)
 
 AM_CFLAGS =\
 	 -Wall\
@@ -22,9 +21,6 @@ libcrony_la_SOURCES = \
 	DateTime.cpp     \
 	CronExceptions.cpp     \
 	stringUtil.h
-
-libcrony_la_LIBADD = \
-	$(SIGC_LIBS)
 
 libcrony_la_CXXFLAGS = \
 	-I../include
