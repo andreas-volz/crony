@@ -39,11 +39,6 @@ void dumpSeconds (double seconds)
   cout << endl;
 }
 
-void onHit ()
-{
-  cout << "Hit!" << endl;
-}
-
 double secondsToHour (int hour)
 {
   DateTime dt;
