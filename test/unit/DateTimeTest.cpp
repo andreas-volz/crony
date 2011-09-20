@@ -32,3 +32,23 @@ void DateTimeTest::test1 (void)
   CPPUNIT_ASSERT (test.str ().size () != 0);
 }
 
+void DateTimeTest::test2 (void)
+{
+  crony::DateTime dtReference;
+    std::ostringstream test;
+  
+  dtReference.setYear (2010 - DateTime::YearShift);
+  dtReference.setMonth (DateTime::April);
+  dtReference.setDayOfMonth (13);
+  dtReference.setHours (11);
+  dtReference.setMinutes (10);
+  dtReference.setSeconds (0);
+
+  crony::DateTime dtReference2 (dtReference);
+  
+  dtReference2.setSeconds (dtReference.getSeconds () + 1);
+
+  double result = dtReference2 - dtReference;
+
+  CPPUNIT_ASSERT_EQUAL (1, (int) result);
+}

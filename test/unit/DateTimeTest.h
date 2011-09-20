@@ -17,6 +17,9 @@ class DateTimeTest : public CPPUNIT_NS::TestFixture
   // define a simple date and test << operator
   CPPUNIT_TEST (test1);
 
+  // test - operator
+  CPPUNIT_TEST (test2);
+
   CPPUNIT_TEST_SUITE_END ();
 
 public:
@@ -25,6 +28,7 @@ public:
 
 protected:
   void test1 (void);
+  void test2 (void);
 
 private:
   
