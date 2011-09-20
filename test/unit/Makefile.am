@@ -3,8 +3,8 @@ bin_PROGRAMS = \
 	UnitTest
 
 UnitTest_SOURCES = \
-	CronTest1.cpp\
-	CronTest1.h \
+	CronTest.cpp\
+	CronTest.h \
 	TestMain.cpp
 
 UnitTest_LDFLAGS = \

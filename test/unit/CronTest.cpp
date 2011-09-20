@@ -1,11 +1,11 @@
-#include "CronTest1.h"
+#include "CronTest.h"
 
 using namespace std;
 using namespace crony;
 
-CPPUNIT_TEST_SUITE_REGISTRATION (CronTest1);
+CPPUNIT_TEST_SUITE_REGISTRATION (CronTest);
 
-void CronTest1::setUp (void)
+void CronTest::setUp (void)
 {
   mdtReference.setYear (2010 - DateTime::YearShift);
   mdtReference.setMonth (DateTime::April);
@@ -16,12 +16,12 @@ void CronTest1::setUp (void)
   //cout << "mdtReference: " << endl << mdtReference << endl;
 }
 
-void CronTest1::tearDown (void)
+void CronTest::tearDown (void)
 {
   
 }
 
-void CronTest1::test1 (void)
+void CronTest::test1 (void)
 {
   Cron cron1;
   DateTime alarmCalc;
@@ -41,7 +41,7 @@ void CronTest1::test1 (void)
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
-void CronTest1::test2 (void)
+void CronTest::test2 (void)
 {
   Cron cron1;
   DateTime alarmCalc;
@@ -61,7 +61,7 @@ void CronTest1::test2 (void)
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
-void CronTest1::test3 (void)
+void CronTest::test3 (void)
 {
   Cron cron1;
   DateTime alarmCalc;
@@ -81,7 +81,7 @@ void CronTest1::test3 (void)
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
-void CronTest1::test4 (void)
+void CronTest::test4 (void)
 {
   Cron cron1;
   DateTime alarmCalc;
@@ -101,7 +101,7 @@ void CronTest1::test4 (void)
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
-void CronTest1::test5 (void)
+void CronTest::test5 (void)
 {
   Cron cron1;
   DateTime alarmCalc;
@@ -121,7 +121,7 @@ void CronTest1::test5 (void)
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
-void CronTest1::test6 (void)
+void CronTest::test6 (void)
 {
   Cron cron1;
   DateTime alarmCalc;
@@ -141,7 +141,7 @@ void CronTest1::test6 (void)
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
-void CronTest1::test7 (void)
+void CronTest::test7 (void)
 {
   Cron cron1;
   DateTime alarmCalc;
@@ -181,7 +181,7 @@ void CronTest1::test7 (void)
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
-void CronTest1::test8 (void)
+void CronTest::test8 (void)
 {
   Cron cron1;
   DateTime alarmCalc;
@@ -202,7 +202,7 @@ void CronTest1::test8 (void)
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
-void CronTest1::test9 (void)
+void CronTest::test9 (void)
 {
   Cron cron1;
   DateTime alarmCalc;
@@ -231,7 +231,7 @@ void CronTest1::test9 (void)
   CPPUNIT_ASSERT (false);
 }
 
-void CronTest1::test10 (void)
+void CronTest::test10 (void)
 {
   Cron cron1;
   DateTime alarmCalc;
@@ -260,7 +260,7 @@ void CronTest1::test10 (void)
   CPPUNIT_ASSERT (false);
 }
 
-void CronTest1::test11 (void)
+void CronTest::test11 (void)
 {
   Cron cron1;
   DateTime alarmCalc;
@@ -291,7 +291,7 @@ void CronTest1::test11 (void)
 
 // test12 placeholder (dayofweek)...
 
-void CronTest1::test13 (void)
+void CronTest::test13 (void)
 {
   Cron cron1;
   DateTime alarmCalc;
@@ -320,7 +320,7 @@ void CronTest1::test13 (void)
   CPPUNIT_ASSERT (false);
 }
 
-void CronTest1::test14 (void)
+void CronTest::test14 (void)
 {
   Cron cron1;
   DateTime alarmCalc;

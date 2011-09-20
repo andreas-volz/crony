@@ -1,5 +1,5 @@
-#ifndef CRONTEST1_H
-#define CRONTEST1_H
+#ifndef CRON_TEST_H
+#define CRON_TEST_H
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -10,9 +10,9 @@
 // local
 #include "crony/Cron.h"
 
-class CronTest1 : public CPPUNIT_NS::TestFixture
+class CronTest : public CPPUNIT_NS::TestFixture
 {
-  CPPUNIT_TEST_SUITE (CronTest1);
+  CPPUNIT_TEST_SUITE (CronTest);
 
   // hit one year in future
   CPPUNIT_TEST (test1);
@@ -83,5 +83,5 @@ private:
   crony::DateTime mdtReference;
 };
 
-#endif // CRONTEST1_H
+#endif // CRON_TEST_H
 
