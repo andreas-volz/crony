@@ -20,19 +20,26 @@ class DateTimeTest : public CPPUNIT_NS::TestFixture
   // test - operator
   CPPUNIT_TEST (test2);
 
+  // test < operator
+  CPPUNIT_TEST (test3);
+
+  // test > operator
+  CPPUNIT_TEST (test4);
+
   CPPUNIT_TEST_SUITE_END ();
 
 public:
-  void setUp (void);
-  void tearDown (void);
+  void setUp ();
+  void tearDown ();
 
 protected:
-  void test1 (void);
-  void test2 (void);
+  void test1 ();
+  void test2 ();
+  void test3 ();
+  void test4 ();
 
 private:
   
 };
 
 #endif // DATE_TIME_TEST_H
-
