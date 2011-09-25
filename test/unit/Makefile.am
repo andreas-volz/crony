@@ -7,7 +7,9 @@ UnitTest_SOURCES = \
 	CronTest.h \
 	TestMain.cpp \
 	DateTimeTest.cpp \
-	DateTimeTest.h
+	DateTimeTest.h \
+	CronTabTest.cpp \
+	CronTabTest.h
 
 UnitTest_LDFLAGS = \
 	../../src/libcrony.la

@@ -4,8 +4,6 @@
 #include <ctime>
 #include <sstream>
 
-// TODO: think about recalculation flag...
-
 namespace crony {
 
 class DateTime
