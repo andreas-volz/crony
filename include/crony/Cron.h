@@ -70,14 +70,13 @@ public:
   {
     StepYear,
     StepMonth,
-    StepDayOfMonth,
+    StepDayOfMonthOrWeek,
     StepHour,
     StepMinute
   };
   
   Cron ();
 
-  // TODO: all const reference parameters
   void setYearList (const std::list <Year> &yearList);
 
   void setDayOfWeekList (const std::list <DayOfWeek> &dayOfWeekList);
@@ -111,6 +110,8 @@ private:
   bool checkDayOfMonth (DateTime &mAlarm, bool recheck = false) const;
   bool checkHour (DateTime &mAlarm, bool recheck = false) const;
   bool checkMinute (DateTime &mAlarm, bool recheck = false) const;
+
+  bool isDayOfWeekMode () const;
   
   std::list <Year> mYearList;
   std::list <DayOfWeek> mDayOfWeekList;

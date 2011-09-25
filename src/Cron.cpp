@@ -57,7 +57,7 @@ DateTime Cron::calcNextHit () const
   
   bool checkedYear = false;
   bool checkedMonth = false;
-  bool checkedDayOfMonth = false;
+  bool checkedDayOfMonthOrWeek = false;
   bool checkedHour = false;
   bool checkedMinute = false;
   
@@ -72,7 +72,7 @@ DateTime Cron::calcNextHit () const
         // set variables for next run
         checkedYear = true;
         checkedMonth = false;
-        checkedDayOfMonth = false;
+        checkedDayOfMonthOrWeek = false;
         checkedHour = false;
         checkedMinute = false;
 
@@ -92,7 +92,7 @@ DateTime Cron::calcNextHit () const
         step = StepYear;
         checkedYear = true;
         checkedMonth = false;
-        checkedDayOfMonth = false;
+        checkedDayOfMonthOrWeek = false;
         checkedHour = false;
         checkedMinute = false;
 
@@ -102,9 +102,16 @@ DateTime Cron::calcNextHit () const
         }
       }
         
-      case StepDayOfMonth:
+      case StepDayOfMonthOrWeek:
       {
-        result = checkDayOfMonth (alarmTime, checkedDayOfMonth); // TODO: checkDayOfWeek
+        if (isDayOfWeekMode ())
+        {
+        result = checkDayOfWeek (alarmTime, checkedDayOfMonthOrWeek);
+        }
+        else
+        {
+          result = checkDayOfMonth (alarmTime, checkedDayOfMonthOrWeek);
+        }
 
         if (!result && checkedYear && checkedMonth)
         {
@@ -115,7 +122,7 @@ DateTime Cron::calcNextHit () const
         step = StepMonth;
         checkedYear = true;
         checkedMonth = true;
-        checkedDayOfMonth = false;
+        checkedDayOfMonthOrWeek = false;
         checkedHour = false;
         checkedMinute = false;
 
@@ -129,15 +136,15 @@ DateTime Cron::calcNextHit () const
       {
         result = checkHour (alarmTime, checkedHour);
 
-        if (!result && checkedYear && checkedMonth && checkedDayOfMonth)
+        if (!result && checkedYear && checkedMonth && checkedDayOfMonthOrWeek)
         {
           throw CronInPastException ();
         }
         
-        step = StepDayOfMonth;
+        step = StepDayOfMonthOrWeek;
         checkedYear = true;
         checkedMonth = true;
-        checkedDayOfMonth = true;
+        checkedDayOfMonthOrWeek = true;
         checkedHour = false;
         checkedMinute = false;
         
@@ -151,7 +158,7 @@ DateTime Cron::calcNextHit () const
       {
         result = checkMinute (alarmTime, checkedMinute);
 
-        if (!result && checkedYear && checkedMonth && checkedDayOfMonth && checkedHour)
+        if (!result && checkedYear && checkedMonth && checkedDayOfMonthOrWeek && checkedHour)
         {
           throw CronInPastException ();
         }
@@ -159,7 +166,7 @@ DateTime Cron::calcNextHit () const
         step = StepHour;
         checkedYear = true;
         checkedMonth = true;
-        checkedDayOfMonth = true;
+        checkedDayOfMonthOrWeek = true;
         checkedHour = true;
         checkedMinute = false;
         
@@ -526,6 +533,16 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
 void Cron::setCurrentDateTime (DateTime current)
 {
   mCurrent = current;
+}
+
+bool Cron::isDayOfWeekMode () const
+{
+  if ((mDayOfMonthList.size () == 0) && (mDayOfWeekList.size () > 0))
+  {
+    return true;
+  }
+
+  return false;
 }
 
 } // end namespace crony
