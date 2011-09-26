@@ -6,6 +6,9 @@
 
 namespace crony {
 
+/*!
+ * @see: man mktime
+ */
 class DateTime
 {
 public:
@@ -75,10 +78,10 @@ public:
   bool getDaylightSaving () const;
   void setDayLightSaving (bool isdst);
 
-  // get only -> see 'enum WeekDay'
+  // 0-6
   int getDayOfWeek () const;
 
-  // get only
+  // 0-365
   int getDayOfYear () const;
 
   time_t getTimestamp () const;
