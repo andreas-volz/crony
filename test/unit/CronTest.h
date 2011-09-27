@@ -24,8 +24,7 @@ class CronTest : public CPPUNIT_NS::TestFixture
   CPPUNIT_TEST (test3);
 
   // hit  one dayofweek in future
-  // FIXME
-  //CPPUNIT_TEST (test4);
+  CPPUNIT_TEST (test4);
 
   // hit one hour in future
   CPPUNIT_TEST (test5);
@@ -48,8 +47,8 @@ class CronTest : public CPPUNIT_NS::TestFixture
   // don't hit anything, because dayofmonth in past
   CPPUNIT_TEST (test11);
 
-  // don't hit anything, because dayofweek in past
-  //CPPUNIT_TEST (test12);
+  // hit next week, because dayofweek in past
+  CPPUNIT_TEST (test12);
 
   // don't hit anything, because month in past
   CPPUNIT_TEST (test13);
@@ -75,7 +74,7 @@ protected:
   void test9 ();
   void test10 ();
   void test11 ();
-  //void test12 ();
+  void test12 ();
   void test13 ();
   void test14 ();
 

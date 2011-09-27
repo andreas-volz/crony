@@ -332,7 +332,7 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
   }
   else
   {
-    int dayofweekDiff = MaxDayOfMonthDiff;
+    int dayofmonthDiff = MaxDayOfMonthDiff;
     DayOfMonth dayofmonth = mCurrent.getDayOfMonth ();
     
     for (list <DayOfWeek>::const_iterator dow_it = mDayOfWeekList.begin ();
@@ -340,41 +340,37 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
          ++dow_it)
     {
       DayOfWeek dayofweek = *dow_it;
+      DayOfMonth tmp;
       
-      // harmonize with DateTime format
-      if (dayofweek == 7)
+      if (dayofweek >= mCurrent.getDayOfWeek ())
       {
-        dayofweek = 0;
+        tmp = mCurrent.getDayOfMonth () + (dayofweek - mCurrent.getDayOfWeek ());
+      }
+      else
+      {
+        tmp = mCurrent.getDayOfMonth () + (dayofweek - mCurrent.getDayOfWeek ()) + MaxDayOfWeekDiff;
       }
 
-      DayOfWeek tmp_dayofweekdiff = mCurrent.getDayOfWeek () - dayofweek;
-
       // check for nearest value above
-      if ((dayofweek >= 0) && (dayofweek <= dayofweekDiff))
+      if ((tmp >= 0) && (tmp <= dayofmonthDiff))
       {
         if (recheck)
         {
           if (dayofmonth > mCurrent.getDayOfMonth ())
           {
-            dayofweekDiff = dayofmonth;
+            dayofmonthDiff = tmp;
           }
         }
         else
         {
-          dayofweekDiff = dayofmonth;
+          dayofmonthDiff = tmp;
         }
       }
     }
 
-    if (dayofweekDiff == MaxDayOfWeekDiff) //MaxDayOfWeekDiff?
+    if (dayofmonthDiff > 0)
     {
-      cout << "not possible to hit day of month in past: adding month" << endl;
-      alarmTime.setDayOfMonth (*min_element (mDayOfWeekList.begin (), mDayOfWeekList.end ()));
-      result = false;
-    }
-    else if (dayofweekDiff > 0)
-    {
-      alarmTime.setDayOfMonth (mCurrent.getDayOfMonth () + dayofweekDiff);
+      alarmTime.setDayOfMonth (/*mCurrent.getDayOfMonth () +*/ dayofmonthDiff);
     }
   }
 

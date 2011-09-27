@@ -289,7 +289,25 @@ void CronTest::test11 ()
   CPPUNIT_ASSERT (false);
 }
 
-// test12 placeholder (dayofweek)...
+void CronTest::test12 ()
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () + 7 /* week */ - 1);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <DayOfWeek> dayofweekList;
+  dayofweekList.push_back (mdtReference.getDayOfWeek () - 1);
+  cron1.setDayOfWeekList (dayofweekList);
+
+  alarmCalc = cron1.calcNextHit ();
+
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
 
 void CronTest::test13 ()
 {

@@ -102,7 +102,7 @@ public:
 private:
   static const int MaxYearDiff = 2000;
   static const int MaxMonthDiff = 12;
-  static const int MaxDayOfMonthDiff = 31;
+  static const int MaxDayOfMonthDiff = 31; // TODO: how to handle month with less days?
   static const int MaxDayOfWeekDiff = 7;
   static const int MaxHourDiff = 24;
   static const int MaxMinuteDiff = 60;
