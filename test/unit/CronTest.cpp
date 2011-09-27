@@ -366,3 +366,59 @@ void CronTest::test14 ()
   // if exception is not hit there's an error in the algorithm, because time is in past
   CPPUNIT_ASSERT (false);
 }
+
+void CronTest::test15 ()
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  DateTime dtReference;
+  dtReference.setYear (2011 - DateTime::YearShift);
+  dtReference.setMonth (DateTime::September);
+  dtReference.setDayOfMonth (27);
+  dtReference.setHours (11);
+  dtReference.setMinutes (10);
+  dtReference.setSeconds (0); // 0 is important as Cron assumes always 0!
+
+  alarmExpect = dtReference;
+  alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () + 7 /* week */ - 1);
+
+  cron1.setCurrentDateTime (dtReference);
+
+  std::list <DayOfWeek> dayofweekList;
+  dayofweekList.push_back (mdtReference.getDayOfWeek () - 1);
+  cron1.setDayOfWeekList (dayofweekList);
+
+  alarmCalc = cron1.calcNextHit ();
+
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
+
+void CronTest::test16 ()
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  DateTime dtReference;
+  dtReference.setYear (2011 - DateTime::YearShift);
+  dtReference.setMonth (DateTime::September);
+  dtReference.setDayOfMonth (30);
+  dtReference.setHours (11);
+  dtReference.setMinutes (10);
+  dtReference.setSeconds (0); // 0 is important as Cron assumes always 0!
+
+  alarmExpect = dtReference;
+  alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () + 1);
+
+  cron1.setCurrentDateTime (dtReference);
+
+  std::list <DayOfWeek> dayofweekList;
+  dayofweekList.push_back (mdtReference.getDayOfWeek () + 1);
+  cron1.setDayOfWeekList (dayofweekList);
+
+  alarmCalc = cron1.calcNextHit ();
+
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
