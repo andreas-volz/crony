@@ -308,7 +308,6 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
   return result;
 }
 
-// TODO: implement
 bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
 {
   bool result = true;
@@ -370,7 +369,7 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
 
     if (dayofmonthDiff > 0)
     {
-      alarmTime.setDayOfMonth (/*mCurrent.getDayOfMonth () +*/ dayofmonthDiff);
+      alarmTime.setDayOfMonth (dayofmonthDiff);
     }
   }
 

@@ -376,7 +376,7 @@ void CronTest::test15 ()
   DateTime dtReference;
   dtReference.setYear (2011 - DateTime::YearShift);
   dtReference.setMonth (DateTime::September);
-  dtReference.setDayOfMonth (27);
+  dtReference.setDayOfMonth (30);
   dtReference.setHours (11);
   dtReference.setMinutes (10);
   dtReference.setSeconds (0); // 0 is important as Cron assumes always 0!
@@ -387,7 +387,7 @@ void CronTest::test15 ()
   cron1.setCurrentDateTime (dtReference);
 
   std::list <DayOfWeek> dayofweekList;
-  dayofweekList.push_back (mdtReference.getDayOfWeek () - 1);
+  dayofweekList.push_back (dtReference.getDayOfWeek () - 1);
   cron1.setDayOfWeekList (dayofweekList);
 
   alarmCalc = cron1.calcNextHit ();
@@ -415,7 +415,7 @@ void CronTest::test16 ()
   cron1.setCurrentDateTime (dtReference);
 
   std::list <DayOfWeek> dayofweekList;
-  dayofweekList.push_back (mdtReference.getDayOfWeek () + 1);
+  dayofweekList.push_back (dtReference.getDayOfWeek () + 1);
   cron1.setDayOfWeekList (dayofweekList);
 
   alarmCalc = cron1.calcNextHit ();
