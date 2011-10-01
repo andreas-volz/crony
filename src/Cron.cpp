@@ -367,10 +367,7 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
       }
     }
 
-    if (dayofmonthDiff > 0)
-    {
-      alarmTime.setDayOfMonth (dayofmonthDiff);
-    }
+    alarmTime.setDayOfMonth (dayofmonthDiff);
   }
 
   return result;
