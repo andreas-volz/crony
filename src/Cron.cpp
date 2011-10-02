@@ -157,7 +157,7 @@ DateTime Cron::calcNextHit () const
       case StepMinute:
       {
         result = checkMinute (alarmTime, checkedMinute);
-
+        
         if (!result && checkedYear && checkedMonth && checkedDayOfMonthOrWeek && checkedHour)
         {
           throw CronInPastException ();

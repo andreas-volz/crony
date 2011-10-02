@@ -478,3 +478,19 @@ void CronTest::test18 ()
 
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
+
+void CronTest::test19 ()
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setMinutes (alarmExpect.getMinutes () + 1);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  alarmCalc = cron1.calcNextHit ();
+  
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}

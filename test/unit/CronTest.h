@@ -67,6 +67,9 @@ class CronTest : public CPPUNIT_NS::TestFixture
 
   // hit next dayofweek (at year border; dayofweek in locale future)
   CPPUNIT_TEST (test18);
+
+  // hit each minute
+  CPPUNIT_TEST (test19);
   
   CPPUNIT_TEST_SUITE_END ();
 
@@ -93,6 +96,7 @@ protected:
   void test16 ();
   void test17 ();
   void test18 ();
+  void test19 ();
 
 private:
   crony::DateTime mdtReference;
