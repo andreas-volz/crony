@@ -7,13 +7,13 @@ CPPUNIT_TEST_SUITE_REGISTRATION (CronTest);
 
 void CronTest::setUp ()
 {
+  // changing this reference time could influence result of tests!
   mdtReference.setYear (2010 - DateTime::YearShift);
   mdtReference.setMonth (DateTime::April);
   mdtReference.setDayOfMonth (13);
   mdtReference.setHours (11);
   mdtReference.setMinutes (10);
   mdtReference.setSeconds (0); // 0 is important as Cron assumes always 0!
-  //cout << "mdtReference: " << endl << mdtReference << endl;
 }
 
 void CronTest::tearDown ()
@@ -29,6 +29,11 @@ void CronTest::test1 ()
 
   alarmExpect = mdtReference;
   alarmExpect.setYear (mdtReference.getYear () + 1);
+  alarmExpect.setMonth (DateTime::January);
+  alarmExpect.setDayOfMonth (1);
+  alarmExpect.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
   
   cron1.setCurrentDateTime (mdtReference);
 
@@ -36,8 +41,19 @@ void CronTest::test1 ()
   yearList.push_back (mdtReference.getYear () + DateTime::YearShift + 1);
   cron1.setYearList (yearList);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
 
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
@@ -49,6 +65,10 @@ void CronTest::test2 ()
 
   alarmExpect = mdtReference;
   alarmExpect.setMonth (mdtReference.getMonth () + 1);
+  alarmExpect.setDayOfMonth (1);
+  alarmExpect.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
 
   cron1.setCurrentDateTime (mdtReference);
 
@@ -56,8 +76,19 @@ void CronTest::test2 ()
   monthList.push_back (mdtReference.getMonth () + 1 + 1); // +1 for time format...
   cron1.setMonthList (monthList);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
 
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
@@ -69,6 +100,9 @@ void CronTest::test3 ()
 
   alarmExpect = mdtReference;
   alarmExpect.setDayOfMonth (mdtReference.getDayOfMonth () + 1);
+  alarmExpect.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
 
   cron1.setCurrentDateTime (mdtReference);
 
@@ -76,8 +110,19 @@ void CronTest::test3 ()
   dayOfMonthList.push_back (mdtReference.getDayOfMonth () + 1);
   cron1.setDayOfMonthList (dayOfMonthList);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
 
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
@@ -88,16 +133,31 @@ void CronTest::test4 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () + (alarmExpect.getDayOfWeek () - mdtReference.getDayOfWeek () + 1));
-
+  // TODO: this is wrong below!!
+  alarmExpect.setDayOfMonth (mdtReference.getDayOfMonth () + (mdtReference.getDayOfWeek () - mdtReference.getDayOfWeek () + 1));
+  alarmExpect.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
+  
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <DayOfWeek> dayOfWeekList;
   dayOfWeekList.push_back (mdtReference.getDayOfWeek () + 1);
   cron1.setDayOfWeekList (dayOfWeekList);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
 
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
@@ -108,7 +168,9 @@ void CronTest::test5 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setHours (alarmExpect.getHours () + 1);
+  alarmExpect.setHours (mdtReference.getHours () + 1);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
 
   cron1.setCurrentDateTime (mdtReference);
 
@@ -116,8 +178,19 @@ void CronTest::test5 ()
   hourList.push_back (mdtReference.getHours () + 1);
   cron1.setHourList (hourList);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
 
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
@@ -129,6 +202,7 @@ void CronTest::test6 ()
 
   alarmExpect = mdtReference;
   alarmExpect.setMinutes (alarmExpect.getMinutes () + 1);
+  alarmExpect.setSeconds (0);
 
   cron1.setCurrentDateTime (mdtReference);
 
@@ -136,8 +210,19 @@ void CronTest::test6 ()
   minuteList.push_back (mdtReference.getMinutes () + 1);
   cron1.setMinuteList (minuteList);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
 
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
@@ -151,9 +236,10 @@ void CronTest::test7 ()
   alarmExpect.setYear (mdtReference.getYear () + 1);
   alarmExpect.setMonth (mdtReference.getMonth () + 1);
   alarmExpect.setDayOfMonth (mdtReference.getDayOfMonth () + 1);
-  alarmExpect.setHours (alarmExpect.getHours () + 1);
-  alarmExpect.setMinutes (alarmExpect.getMinutes () + 1);
-
+  alarmExpect.setHours (mdtReference.getHours () + 1);
+  alarmExpect.setMinutes (mdtReference.getMinutes () + 1);
+  alarmExpect.setSeconds (0);
+    
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Year> yearList;
@@ -176,8 +262,19 @@ void CronTest::test7 ()
   minuteList.push_back (mdtReference.getMinutes () + 1);
   cron1.setMinuteList (minuteList);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
 
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
@@ -188,8 +285,9 @@ void CronTest::test8 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setMinutes (alarmExpect.getMinutes () + 1);
-
+  alarmExpect.setMinutes (mdtReference.getMinutes () + 1);
+  alarmExpect.setSeconds (0);
+  
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Minute> minuteList;
@@ -197,7 +295,18 @@ void CronTest::test8 ()
   minuteList.push_back (mdtReference.getMinutes () + 1);
   cron1.setMinuteList (minuteList);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
+
+    CPPUNIT_ASSERT (false);
+    return;
+  }
   
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
@@ -209,7 +318,9 @@ void CronTest::test9 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setMinutes (alarmExpect.getMinutes () - 1);
+  alarmExpect.setHours (mdtReference.getHours () + 1);
+  alarmExpect.setMinutes (mdtReference.getMinutes () - 1);
+  alarmExpect.setSeconds (0);
 
   cron1.setCurrentDateTime (mdtReference);
 
@@ -223,12 +334,14 @@ void CronTest::test9 ()
   }
   catch (CronInPastException ex)
   {
-    // in this special unit test reaching the exception case is passed result...
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
+
+    CPPUNIT_ASSERT (false);
     return;
   }
 
-  // if exception is not hit there's an error in the algorithm, because time is in past
-  CPPUNIT_ASSERT (false);
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
 void CronTest::test10 ()
@@ -238,7 +351,10 @@ void CronTest::test10 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setHours (alarmExpect.getHours () - 1);
+  alarmExpect.setDayOfMonth (mdtReference.getDayOfMonth () + 1);
+  alarmExpect.setHours (mdtReference.getHours () - 1);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
 
   cron1.setCurrentDateTime (mdtReference);
 
@@ -252,12 +368,14 @@ void CronTest::test10 ()
   }
   catch (CronInPastException ex)
   {
-    // in this special unit test reaching the exception case is passed result...
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
+
+    CPPUNIT_ASSERT (false);
     return;
   }
 
-  // if exception is not hit there's an error in the algorithm, because time is in past
-  CPPUNIT_ASSERT (false);
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
 void CronTest::test11 ()
@@ -267,8 +385,12 @@ void CronTest::test11 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () - 1);
-
+  alarmExpect.setMonth (mdtReference.getMonth () + 1);
+  alarmExpect.setDayOfMonth (mdtReference.getDayOfMonth () - 1);
+  alarmExpect.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
+  
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <DayOfMonth> dayofmonthList;
@@ -281,12 +403,14 @@ void CronTest::test11 ()
   }
   catch (CronInPastException ex)
   {
-    // in this special unit test reaching the exception case is passed result...
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
+
+    CPPUNIT_ASSERT (false);
     return;
   }
 
-  // if exception is not hit there's an error in the algorithm, because time is in past
-  CPPUNIT_ASSERT (false);
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
 void CronTest::test12 ()
@@ -296,16 +420,30 @@ void CronTest::test12 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () + 7 /* week */ - 1);
-
+  alarmExpect.setDayOfMonth (mdtReference.getDayOfMonth () + 7 /* week */ - 1);
+  alarmExpect.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
+  
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <DayOfWeek> dayofweekList;
   dayofweekList.push_back (mdtReference.getDayOfWeek () - 1);
   cron1.setDayOfWeekList (dayofweekList);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
 
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
@@ -316,8 +454,13 @@ void CronTest::test13 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setMonth (alarmExpect.getMonth () - 1);
-
+  alarmExpect.setYear (mdtReference.getYear () + 1);
+  alarmExpect.setMonth (DateTime::January);
+  alarmExpect.setDayOfMonth (1);
+  alarmExpect.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
+  
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Month> monthList;
@@ -330,12 +473,14 @@ void CronTest::test13 ()
   }
   catch (CronInPastException ex)
   {
-    // in this special unit test reaching the exception case is passed result...
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
+
+    CPPUNIT_ASSERT (false);
     return;
   }
 
-  // if exception is not hit there's an error in the algorithm, because time is in past
-  CPPUNIT_ASSERT (false);
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
 void CronTest::test14 ()
@@ -345,7 +490,13 @@ void CronTest::test14 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
+  // not important what is set - should throw exception
   alarmExpect.setYear (alarmExpect.getYear () - 1);
+  alarmExpect.setMonth (DateTime::January);
+  alarmExpect.setDayOfMonth (1);
+  alarmExpect.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
 
   cron1.setCurrentDateTime (mdtReference);
 
@@ -359,12 +510,13 @@ void CronTest::test14 ()
   }
   catch (CronInPastException ex)
   {
-    // in this special unit test reaching the exception case is passed result...
+    // test passed!
+    CPPUNIT_ASSERT (true);
     return;
   }
 
-  // if exception is not hit there's an error in the algorithm, because time is in past
-  CPPUNIT_ASSERT (false);
+  // test failed!
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
 void CronTest::test15 ()
@@ -390,8 +542,19 @@ void CronTest::test15 ()
   dayofweekList.push_back (dtReference.getDayOfWeek () - 1);
   cron1.setDayOfWeekList (dayofweekList);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
 
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
@@ -418,8 +581,19 @@ void CronTest::test16 ()
   dayofweekList.push_back (dtReference.getDayOfWeek () + 1);
   cron1.setDayOfWeekList (dayofweekList);
 
-  alarmCalc = cron1.calcNextHit ();
-
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
+    
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
@@ -446,8 +620,19 @@ void CronTest::test17 ()
   dayofweekList.push_back (dtReference.getDayOfWeek () - 1);
   cron1.setDayOfWeekList (dayofweekList);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
 
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
@@ -474,8 +659,19 @@ void CronTest::test18 ()
   dayofweekList.push_back (dtReference.getDayOfWeek () + 1);
   cron1.setDayOfWeekList (dayofweekList);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
 
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
 
@@ -490,7 +686,54 @@ void CronTest::test19 ()
 
   cron1.setCurrentDateTime (mdtReference);
 
-  alarmCalc = cron1.calcNextHit ();
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
+
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
+
+void CronTest::test20 ()
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setYear (mdtReference.getYear () + 2);
+  mdtReference.setMonth (DateTime::January);
+  mdtReference.setDayOfMonth (1);
+  mdtReference.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
+  
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <Year> yearList;
+  yearList.push_back (mdtReference.getYear () + DateTime::YearShift + 2);
+  cron1.setYearList (yearList);
+
+  try
+  {
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
+
+    CPPUNIT_ASSERT (false);
+    return;
+  }
   
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }

@@ -14,43 +14,43 @@ class CronTest : public CPPUNIT_NS::TestFixture
 {
   CPPUNIT_TEST_SUITE (CronTest);
 
-  // hit one year in future
+  // hit next year in future
   CPPUNIT_TEST (test1);
 
-  // hit one month in future
+  // hit next month in future
   CPPUNIT_TEST (test2);
 
-  // hit one day of month in future
+  // hit next day of month in future
   CPPUNIT_TEST (test3);
 
-  // hit  one dayofweek in future
+  // hit next dayofweek in future
   CPPUNIT_TEST (test4);
 
-  // hit one hour in future
+  // hit next hour in future
   CPPUNIT_TEST (test5);
 
-  // hit one minute in future
+  // hit next minute in future
   CPPUNIT_TEST (test6);
 
-  // hit one year, month, day of month, hour and minute in future
+  // hit next year, month, day of month, hour and minute in future
   CPPUNIT_TEST (test7);
 
   // don't hit in yet started minute
   CPPUNIT_TEST (test8);
 
-  // don't hit anything, because minutes in past
+  // hit next hour, because minutes in past
   CPPUNIT_TEST (test9);
 
-  // don't hit anything, because hours in past
+  // hit next day, because hours in past
   CPPUNIT_TEST (test10);
 
-  // don't hit anything, because dayofmonth in past
+  // hit next month, because dayofmonth in past
   CPPUNIT_TEST (test11);
 
   // hit next week, because dayofweek in past
   CPPUNIT_TEST (test12);
 
-  // don't hit anything, because month in past
+  // hit next year, because month in past
   CPPUNIT_TEST (test13);
 
   // don't hit anything, because year in past
@@ -69,7 +69,10 @@ class CronTest : public CPPUNIT_NS::TestFixture
   CPPUNIT_TEST (test18);
 
   // hit each minute
-  CPPUNIT_TEST (test19);
+  //CPPUNIT_TEST (test19);
+
+  // hit next year
+  CPPUNIT_TEST (test20);
   
   CPPUNIT_TEST_SUITE_END ();
 
@@ -97,6 +100,7 @@ protected:
   void test17 ();
   void test18 ();
   void test19 ();
+  void test20 ();
 
 private:
   crony::DateTime mdtReference;
