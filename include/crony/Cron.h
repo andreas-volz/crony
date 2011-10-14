@@ -4,6 +4,7 @@
 // local
 #include "DateTime.h"
 #include "CronExceptions.h"
+#include "Logger.h"
 
 // STD
 #include <stdint.h>
@@ -125,6 +126,8 @@ private:
   std::list <Minute> mMinuteList;
 
   DateTime mCurrent;
+
+  Logger mLogger;
 };
 
 } // end namespace crony

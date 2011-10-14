@@ -3,10 +3,8 @@
 ## Created by Anjuta
 
 AM_CPPFLAGS = \
-	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
-	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
-	$(EFL_CFLAGS)
+	$(EFL_CFLAGS) \
+	$(LOG4CXX_CFLAGS)
 
 AM_CFLAGS =\
 	 -Wall\
@@ -22,6 +20,9 @@ libcrony_la_SOURCES = \
 	CronExceptions.cpp     \
 	stringUtil.h
 
-libcrony_la_CXXFLAGS = \
+libcrony_la_LIBADD = \
+	$(LOG4CXX_LIBS)
+
+libcrony_la_CXXFLAGS =    \
 	-I../include
 

@@ -15,13 +15,15 @@ UnitTest_LDFLAGS = \
 	../../src/libcrony.la
 
 UnitTest_LDADD = \
-	$(UNIT_LIBS)
+	$(UNIT_LIBS)\
+	$(LOG4CXX_LIBS)
 
 UnitTest_CXXFLAGS = \
 	-I../../include
 
 AM_CPPFLAGS = \
-	$(UNIT_CFLAGS)
+	$(UNIT_CFLAGS)\
+	$(LOG4CXX_CFLAGS)
 
 ## File created by the gnome-build tools
 

@@ -11,7 +11,7 @@
 #include "crony/Cron.h"
 
 class CronTest : public CPPUNIT_NS::TestFixture
-{
+{  
   CPPUNIT_TEST_SUITE (CronTest);
 
   // hit next year in future
@@ -69,10 +69,12 @@ class CronTest : public CPPUNIT_NS::TestFixture
   CPPUNIT_TEST (test18);
 
   // hit each minute
-  //CPPUNIT_TEST (test19);
+  CPPUNIT_TEST (test19);
 
-  // hit next year
+  // hit next year // TODO: same as test1?
   CPPUNIT_TEST (test20);
+
+  // TODO: variant: add/subtract two instead of one (induktion...)...
   
   CPPUNIT_TEST_SUITE_END ();
 

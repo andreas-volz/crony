@@ -1,3 +1,7 @@
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 // local
 #include "crony/Cron.h"
 
@@ -10,7 +14,8 @@ using namespace std;
 
 namespace crony {
 
-Cron::Cron ()
+Cron::Cron () :
+  mLogger ("crony.Cron")
 {
 }
 
@@ -46,6 +51,8 @@ void Cron::setMinuteList (const std::list <Minute> &minuteList)
 
 DateTime Cron::calcNextHit () const
 {
+  LOG4CXX_TRACE (mLogger, "calcNextHit");
+  
   DateTime alarmTime;
   alarmTime = mCurrent; // needed to realize other set time (e.g. for unit tests)
   
@@ -156,14 +163,7 @@ DateTime Cron::calcNextHit () const
         
       case StepMinute:
       {
-        if (alarmTime.getHours () > mCurrent.getHours ())
-        {
-          result = checkMinute (alarmTime, true);
-        }
-        else
-        {
-          result = checkMinute (alarmTime, false);
-        }
+        result = checkMinute (alarmTime, checkedMinute);
         
         if (!result && checkedYear && checkedMonth && checkedDayOfMonthOrWeek && checkedHour)
         {
@@ -190,6 +190,8 @@ DateTime Cron::calcNextHit () const
 
 bool Cron::checkYear (DateTime &alarmTime, bool recheck) const
 {
+  LOG4CXX_TRACE (mLogger, "checkYear");
+  
   bool result = true;
   
   // hit all years (*)
@@ -252,6 +254,8 @@ bool Cron::checkYear (DateTime &alarmTime, bool recheck) const
 
 bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
 {  
+  LOG4CXX_TRACE (mLogger, "checkMonth");
+  
   bool result = true;
   
   // hit all months (*)
@@ -266,7 +270,6 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
     else
     {
       tmp = mCurrent.getMonth ();
-      result = false;
     }
     
     if (recheck)
@@ -289,7 +292,7 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
       Month tmp = month - mCurrent.getMonth ();
 
       // check for nearest value above
-      if ((tmp >= 0) && (tmp <= monthDiff))
+      if (tmp <= monthDiff)
       {
         if (recheck)
         {
@@ -307,11 +310,11 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
 
     if (monthDiff == MaxMonthDiff)
     {
-      cout << "not possible to hit month in past: adding years" << endl;
+      LOG4CXX_INFO (mLogger, "not possible to hit month in past: adding years");
       alarmTime.setMonth (*min_element (mMonthList.begin (), mMonthList.end ()));
       result = false;
     }
-    else if (monthDiff > 0)
+    else
     {
       alarmTime.setMonth (mCurrent.getMonth () + monthDiff);
     }
@@ -323,6 +326,8 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
 // TODO
 bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
 {
+  LOG4CXX_TRACE (mLogger, "checkDayOfWeek");
+  
   bool result = true;
   
   // hit all days (*)
@@ -364,7 +369,7 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
       }
 
       // check for nearest value above
-      if ((tmp >= 0) && (tmp <= dayofmonthDiff))
+      if (tmp <= dayofmonthDiff)
       {
         if (recheck)
         {
@@ -380,7 +385,17 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
       }
     }
 
-    alarmTime.setDayOfMonth (dayofmonthDiff);
+    if (dayofmonthDiff == MaxDayOfMonthDiff)
+    {
+      LOG4CXX_INFO (mLogger, "not possible to hit hour in past: adding month");
+      alarmTime.setMonth (*min_element (mMonthList.begin (), mMonthList.end ()));
+
+      result = false;
+    }
+    else
+    {
+      alarmTime.setDayOfMonth (dayofmonthDiff);
+    }
   }
 
   return result;
@@ -388,6 +403,8 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
 
 bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
 {
+  LOG4CXX_TRACE (mLogger, "checkDayOfMonth");
+  
   bool result = true;
   
   // hit all days (*)
@@ -402,7 +419,6 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
     else
     {
       tmp = mCurrent.getDayOfMonth ();
-      result = false;
     }
     
     if (recheck)
@@ -424,7 +440,7 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
       DayOfMonth tmp = dayofmonth - mCurrent.getDayOfMonth ();
 
       // check for nearest value above
-      if ((tmp >= 0) && (tmp <= dayofmonthDiff))
+      if (tmp <= dayofmonthDiff)
       {
         if (recheck)
         {
@@ -442,11 +458,11 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
 
     if (dayofmonthDiff == MaxDayOfMonthDiff)
     {
-      cout << "not possible to hit day of month in past: adding month" << endl;
+      LOG4CXX_INFO (mLogger, "not possible to hit day of month in past: adding month");
       alarmTime.setDayOfMonth (*min_element (mDayOfMonthList.begin (), mDayOfMonthList.end ()));
       result = false;
     }
-    else if (dayofmonthDiff > 0)
+    else
     {
       alarmTime.setDayOfMonth (mCurrent.getDayOfMonth () + dayofmonthDiff);
     }
@@ -457,6 +473,8 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
 
 bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
 {
+  LOG4CXX_TRACE (mLogger, "checkHour");
+  
   bool result = true;
   
   // hit each hour (*)
@@ -471,7 +489,6 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
     else
     {
       tmp = mCurrent.getHours ();
-      result = false;
     }
     
     if (recheck)
@@ -493,7 +510,7 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
       Hour tmp = hour - mCurrent.getHours ();
 
       // check for nearest value above
-      if ((tmp >= 0) && (tmp <= hourDiff))
+      if (tmp <= hourDiff)
       {
         if (recheck)
         {
@@ -511,13 +528,12 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
 
     if (hourDiff == MaxHourDiff)
     {
-      cout << "not possible to hit hour in past: adding days" << endl;
+      LOG4CXX_INFO (mLogger, "not possible to hit hour in past: adding days");
       alarmTime.setHours (*min_element (mHourList.begin (), mHourList.end ()));
-      // TODO: weekday or monthday??
-      //checkDayOfMonth (alarmTime, true);
+
       result = false;
     }
-    else if (hourDiff > 0)
+    else
     {
       alarmTime.setHours (mCurrent.getHours () + hourDiff);
     }
@@ -528,6 +544,8 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
 
 bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
 {
+  LOG4CXX_TRACE (mLogger, "checkMinute");
+  
   bool result = true;
   
   // hit each minute (*)
@@ -542,7 +560,6 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
     else
     {
       tmp = mCurrent.getMinutes ();
-      result = false;
     }
     
     if (recheck)
@@ -564,9 +581,9 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
       Minute tmp = minute - mCurrent.getMinutes ();
 
       // check for nearest value above
-      if ((tmp >= 0) && (tmp <= minuteDiff))
+      if (tmp <= minuteDiff)
       {
-        if ((recheck) || (mCurrent.getHours () == alarmTime.getHours ()) )
+        if (recheck)
         {
           if (minute > mCurrent.getMinutes ())
           {
@@ -582,12 +599,12 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
 
     if (minuteDiff == MaxMinuteDiff)
     {
-      cout << "not possible to hit minute in past: adding hours" << endl;
+      LOG4CXX_INFO (mLogger, "not possible to hit minute in past: adding hours");
       alarmTime.setMinutes (*min_element (mMinuteList.begin (), mMinuteList.end ()));
 
       result = false;
     }
-    else if (minuteDiff > 0)
+    else
     {
       alarmTime.setMinutes (mCurrent.getMinutes () + minuteDiff);
     }
