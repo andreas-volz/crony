@@ -559,7 +559,7 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
     }
     else
     {
-      tmp = mCurrent.getMinutes ();
+      tmp = mCurrent.getMinutes () + 1; // alway hit next minute
     }
     
     if (recheck)
@@ -594,6 +594,12 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
         {
           minuteDiff = tmp;
         }
+      }
+
+      // always hit next minute by adding one minute at current
+      if (tmp == 0)
+      {
+        minuteDiff = 1;
       }
     }
 
