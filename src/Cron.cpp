@@ -149,13 +149,14 @@ DateTime Cron::calcNextHit () const
         
         if (!result) 
         {
+          checkedHour = true;
           continue;
         }
       }
         
       case StepMinute:
       {
-        result = checkMinute (alarmTime, checkedHour);
+        result = checkMinute (alarmTime, checkedMinute);
         LOG4CXX_TRACE (mLogger, "result=" << result);
         
         if (!result && checkedYear && checkedMonth && checkedDayOfMonthOrWeek && checkedHour)
@@ -168,6 +169,7 @@ DateTime Cron::calcNextHit () const
         
         if (!result) 
         {
+          checkedMinute = true;
           continue;
         }
       }
@@ -515,12 +517,22 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
       }
     }
 
+    // if time on past handle as time not hit
+    if (hourDiff < 0)
+    {
+      hourDiff = MaxHourDiff;
+    }
+
     if (hourDiff == MaxHourDiff)
     {
       LOG4CXX_INFO (mLogger, "not possible to hit hour in past: adding days");
       alarmTime.setHours (*min_element (mHourList.begin (), mHourList.end ()));
 
-      result = false;
+      // only repeat last step only once
+      if (!recheck)
+      {
+        result = false;
+      }
     }
     else
     {
@@ -592,7 +604,7 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
       minuteDiff = 1;
     }
 
-    // 
+    // if time on past handle as time not hit
     if (minuteDiff < 0)
     {
       minuteDiff = MaxMinuteDiff;
@@ -603,7 +615,7 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
       LOG4CXX_INFO (mLogger, "not possible to hit minute in past: adding hours");
       alarmTime.setMinutes (*min_element (mMinuteList.begin (), mMinuteList.end ()));
 
-      // only repeat minute step once!
+      // only repeat last step only once
       if (!recheck)
       {
         result = false;
