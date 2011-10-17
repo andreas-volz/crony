@@ -71,7 +71,7 @@ class CronTest : public CPPUNIT_NS::TestFixture
   // hit each minute
   CPPUNIT_TEST (test19);
 
-  // hit next year // TODO: same as test1?
+  // hit next year after (+2)
   CPPUNIT_TEST (test20);
 
   // TODO: variant: add/subtract two instead of one (induktion...)...
