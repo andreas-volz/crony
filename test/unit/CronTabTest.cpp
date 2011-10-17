@@ -32,11 +32,24 @@ void CronTabTest::test1 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
+
+  cronTab.add (cron1);
+  
+  // check 1
   alarmExpect.setMinutes (mdtReference.getMinutes () + 1);
   
   cronTab.setCurrentDateTime (mdtReference);
 
-  cronTab.add (cron1);
+  cerr << endl; // only for log formating
+  alarmCalc = cronTab.calcNextTimer ();
+
+  CPPUNIT_ASSERT_EQUAL (alarmExpect.getTimestamp (), mdtReference.getTimestamp () + alarmCalc);
+
+  // check 2
+  alarmExpect.setMinutes (mdtReference.getMinutes () + 2);
+  mdtReference.setMinutes (mdtReference.getMinutes () + 1);
+    
+  cronTab.setCurrentDateTime (mdtReference);
 
   cerr << endl; // only for log formating
   alarmCalc = cronTab.calcNextTimer ();
