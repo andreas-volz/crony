@@ -77,13 +77,6 @@ DateTime Cron::calcNextHit () const
         result = checkYear (alarmTime, checkedYear);
         LOG4CXX_TRACE (mLogger, "result=" << result);
 
-        // set variables for next run
-        /*checkedYear = true;
-        checkedMonth = false;
-        checkedDayOfMonthOrWeek = false;
-        checkedHour = false;
-        checkedMinute = false;    */    
-
         if (!result) throw CronInPastException ();
       }
         
@@ -103,6 +96,7 @@ DateTime Cron::calcNextHit () const
 
         if (!result) 
         {
+          checkedMonth = true;
           continue;
         }
       }
@@ -130,6 +124,7 @@ DateTime Cron::calcNextHit () const
 
         if (!result) 
         {
+          checkedDayOfMonthOrWeek = true;
           continue;
         }
       }
@@ -447,11 +442,22 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
       }
     }
 
+    // if time on past handle as time not hit
+    if (dayofmonthDiff < 0)
+    {
+      dayofmonthDiff = MaxDayOfMonthDiff;
+    }
+
     if (dayofmonthDiff == MaxDayOfMonthDiff)
     {
       LOG4CXX_INFO (mLogger, "not possible to hit day of month in past: adding month");
       alarmTime.setDayOfMonth (*min_element (mDayOfMonthList.begin (), mDayOfMonthList.end ()));
-      result = false;
+      
+      // only repeat last step only once
+      if (!recheck)
+      {
+        result = false;
+      }
     }
     else
     {
