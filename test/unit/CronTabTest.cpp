@@ -17,7 +17,6 @@ void CronTabTest::setUp ()
   mdtReference.setHours (11);
   mdtReference.setMinutes (10);
   mdtReference.setSeconds (0); // 0 is important as Cron assumes always 0!
-  //cout << "mdtReference: " << endl << mdtReference << endl;
 }
 
 void CronTabTest::tearDown ()
@@ -27,21 +26,20 @@ void CronTabTest::tearDown ()
 
 void CronTabTest::test1 ()
 {
-  /*Cron cron1;
-  DateTime alarmCalc;
+  CronTab cronTab (false);
+  Cron cron1;
+  time_t alarmCalc;
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setYear (mdtReference.getYear () + 1);
+  alarmExpect.setMinutes (mdtReference.getMinutes () + 1);
   
-  cron1.setCurrentDateTime (mdtReference);
+  cronTab.setCurrentDateTime (mdtReference);
 
-  std::list <Year> yearList;
-  yearList.push_back (mdtReference.getYear () + DateTime::YearShift + 1);
-  cron1.setYearList (yearList);
+  cronTab.add (cron1);
 
   cerr << endl; // only for log formating
-  alarmCalc = cron1.calcNextHit ();
+  alarmCalc = cronTab.calcNextTimer ();
 
-  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);*/
+  CPPUNIT_ASSERT_EQUAL (alarmExpect.getTimestamp (), mdtReference.getTimestamp () + alarmCalc);
 }

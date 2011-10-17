@@ -12,6 +12,12 @@ using namespace std;
 
 namespace crony {
 
+CronTab::CronTab (bool autotimer) :
+  mAutotimer (autotimer),
+  mLogger ("crony.CronTab")
+{
+}
+
 void CronTab::add (const Cron &cron)
 {
   // TODO: potential problem if two cron with same time...
@@ -20,26 +26,36 @@ void CronTab::add (const Cron &cron)
 
 time_t CronTab::calcNextTimer ()
 {
+  if (mAutotimer)
+  {
+    mCurrent.current ();
+  }
+  
   for (map <DateTime, Cron>::iterator cr_it = mTable.begin ();
        cr_it != mTable.end ();
        ++cr_it)
   {
-    DateTime current;
     DateTime keytime = cr_it->first;
     Cron cron = cr_it->second;
 
-    cron.setCurrentDateTime (current);
+    cron.setCurrentDateTime (mCurrent);
     DateTime hittime = cron.calcNextHit ();
-    cout << "Calc next hit: " << hittime << endl;
-    if (hittime > current)
+    LOG4CXX_DEBUG (mLogger, "Calc next hit for: " << hittime);
+
+    if (hittime > mCurrent)
     {
       mTable.erase (cr_it);
       mTable[hittime] = cron;
-      return hittime - current;
+      return hittime - mCurrent;
     }
   }
 
   return 0;
+}
+
+void CronTab::setCurrentDateTime (DateTime current)
+{
+  mCurrent = current;
 }
 
 } // end namespace crony

@@ -8,7 +8,7 @@
 #include <string.h>
 
 // local
-#include "crony/Cron.h"
+#include "crony/CronTab.h"
 
 class CronTabTest : public CPPUNIT_NS::TestFixture
 {
