@@ -47,6 +47,7 @@ void CronTest::test1 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -82,6 +83,7 @@ void CronTest::test2 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -116,6 +118,7 @@ void CronTest::test3 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -151,6 +154,7 @@ void CronTest::test4 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -184,6 +188,7 @@ void CronTest::test5 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -216,6 +221,7 @@ void CronTest::test6 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -268,6 +274,7 @@ void CronTest::test7 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -301,6 +308,7 @@ void CronTest::test8 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -334,6 +342,7 @@ void CronTest::test9 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -368,6 +377,7 @@ void CronTest::test10 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -403,6 +413,7 @@ void CronTest::test11 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -437,6 +448,7 @@ void CronTest::test12 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -473,6 +485,7 @@ void CronTest::test13 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -510,6 +523,7 @@ void CronTest::test14 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -548,6 +562,7 @@ void CronTest::test15 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -587,6 +602,7 @@ void CronTest::test16 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -626,6 +642,7 @@ void CronTest::test17 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -665,6 +682,7 @@ void CronTest::test18 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -692,6 +710,7 @@ void CronTest::test19 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)
@@ -728,6 +747,7 @@ void CronTest::test20 ()
 
   try
   {
+    cerr << endl; // only for log formating
     alarmCalc = cron1.calcNextHit ();
   }
   catch (CronInPastException ex)

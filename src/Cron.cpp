@@ -75,13 +75,14 @@ DateTime Cron::calcNextHit () const
       case StepYear:
       {
         result = checkYear (alarmTime, checkedYear);
+        LOG4CXX_TRACE (mLogger, "result=" << result);
 
         // set variables for next run
-        checkedYear = true;
+        /*checkedYear = true;
         checkedMonth = false;
         checkedDayOfMonthOrWeek = false;
         checkedHour = false;
-        checkedMinute = false;
+        checkedMinute = false;    */    
 
         if (!result) throw CronInPastException ();
       }
@@ -89,6 +90,7 @@ DateTime Cron::calcNextHit () const
       case StepMonth:
       {
         result = checkMonth (alarmTime, checkedMonth);
+        LOG4CXX_TRACE (mLogger, "result=" << result);
 
         if (!result && checkedYear)
         {
@@ -98,10 +100,6 @@ DateTime Cron::calcNextHit () const
         // set variables for next run
         step = StepYear;
         checkedYear = true;
-        checkedMonth = false;
-        checkedDayOfMonthOrWeek = false;
-        checkedHour = false;
-        checkedMinute = false;
 
         if (!result) 
         {
@@ -119,6 +117,7 @@ DateTime Cron::calcNextHit () const
         {
           result = checkDayOfMonth (alarmTime, checkedDayOfMonthOrWeek);
         }
+        LOG4CXX_TRACE (mLogger, "result=" << result);
 
         if (!result && checkedYear && checkedMonth)
         {
@@ -127,11 +126,7 @@ DateTime Cron::calcNextHit () const
         
         // set variables for next run
         step = StepMonth;
-        checkedYear = true;
         checkedMonth = true;
-        checkedDayOfMonthOrWeek = false;
-        checkedHour = false;
-        checkedMinute = false;
 
         if (!result) 
         {
@@ -142,6 +137,7 @@ DateTime Cron::calcNextHit () const
       case StepHour:
       {
         result = checkHour (alarmTime, checkedHour);
+        LOG4CXX_TRACE (mLogger, "result=" << result);
 
         if (!result && checkedYear && checkedMonth && checkedDayOfMonthOrWeek)
         {
@@ -149,11 +145,7 @@ DateTime Cron::calcNextHit () const
         }
         
         step = StepDayOfMonthOrWeek;
-        checkedYear = true;
-        checkedMonth = true;
         checkedDayOfMonthOrWeek = true;
-        checkedHour = false;
-        checkedMinute = false;
         
         if (!result) 
         {
@@ -163,7 +155,8 @@ DateTime Cron::calcNextHit () const
         
       case StepMinute:
       {
-        result = checkMinute (alarmTime, checkedMinute);
+        result = checkMinute (alarmTime, checkedHour);
+        LOG4CXX_TRACE (mLogger, "result=" << result);
         
         if (!result && checkedYear && checkedMonth && checkedDayOfMonthOrWeek && checkedHour)
         {
@@ -171,11 +164,7 @@ DateTime Cron::calcNextHit () const
         }
         
         step = StepHour;
-        checkedYear = true;
-        checkedMonth = true;
-        checkedDayOfMonthOrWeek = true;
         checkedHour = true;
-        checkedMinute = false;
         
         if (!result) 
         {
@@ -190,7 +179,7 @@ DateTime Cron::calcNextHit () const
 
 bool Cron::checkYear (DateTime &alarmTime, bool recheck) const
 {
-  LOG4CXX_TRACE (mLogger, "checkYear");
+  LOG4CXX_TRACE (mLogger, "checkYear, recheck=" << recheck);
   
   bool result = true;
   
@@ -254,7 +243,7 @@ bool Cron::checkYear (DateTime &alarmTime, bool recheck) const
 
 bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
 {  
-  LOG4CXX_TRACE (mLogger, "checkMonth");
+  LOG4CXX_TRACE (mLogger, "checkMonth, recheck=" << recheck);
   
   bool result = true;
   
@@ -326,7 +315,7 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
 // TODO
 bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
 {
-  LOG4CXX_TRACE (mLogger, "checkDayOfWeek");
+  LOG4CXX_TRACE (mLogger, "checkDayOfWeek, recheck=" << recheck);
   
   bool result = true;
   
@@ -403,7 +392,7 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
 
 bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
 {
-  LOG4CXX_TRACE (mLogger, "checkDayOfMonth");
+  LOG4CXX_TRACE (mLogger, "checkDayOfMonth, recheck=" << recheck);
   
   bool result = true;
   
@@ -473,7 +462,7 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
 
 bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
 {
-  LOG4CXX_TRACE (mLogger, "checkHour");
+  LOG4CXX_TRACE (mLogger, "checkHour, recheck=" << recheck);
   
   bool result = true;
   
@@ -544,7 +533,7 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
 
 bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
 {
-  LOG4CXX_TRACE (mLogger, "checkMinute");
+  LOG4CXX_TRACE (mLogger, "checkMinute, recheck=" << recheck);
   
   bool result = true;
   
@@ -595,12 +584,18 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
           minuteDiff = tmp;
         }
       }
+    }
 
-      // always hit next minute by adding one minute at current
-      if (tmp == 0)
-      {
-        minuteDiff = 1;
-      }
+    // always hit next minute by adding one minute at current
+    if (minuteDiff == 0)
+    {
+      minuteDiff = 1;
+    }
+
+    // 
+    if (minuteDiff < 0)
+    {
+      minuteDiff = MaxMinuteDiff;
     }
 
     if (minuteDiff == MaxMinuteDiff)
@@ -608,7 +603,11 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
       LOG4CXX_INFO (mLogger, "not possible to hit minute in past: adding hours");
       alarmTime.setMinutes (*min_element (mMinuteList.begin (), mMinuteList.end ()));
 
-      result = false;
+      // only repeat minute step once!
+      if (!recheck)
+      {
+        result = false;
+      }
     }
     else
     {

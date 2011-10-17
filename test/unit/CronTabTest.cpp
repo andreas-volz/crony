@@ -40,6 +40,7 @@ void CronTabTest::test1 ()
   yearList.push_back (mdtReference.getYear () + DateTime::YearShift + 1);
   cron1.setYearList (yearList);
 
+  cerr << endl; // only for log formating
   alarmCalc = cron1.calcNextHit ();
 
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
