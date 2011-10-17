@@ -552,7 +552,10 @@ void CronTest::test15 ()
   dtReference.setSeconds (0); // 0 is important as Cron assumes always 0!
 
   alarmExpect = dtReference;
-  alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () + 7 /* week */ - 1);
+  alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () + 7 /* week - 1 */ - 1);
+  alarmExpect.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
 
   cron1.setCurrentDateTime (dtReference);
 
@@ -593,6 +596,9 @@ void CronTest::test16 ()
 
   alarmExpect = dtReference;
   alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () + 1);
+  alarmExpect.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
 
   cron1.setCurrentDateTime (dtReference);
 
@@ -633,6 +639,9 @@ void CronTest::test17 ()
 
   alarmExpect = dtReference;
   alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () + 7 /* week */ - 1);
+  alarmExpect.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
 
   cron1.setCurrentDateTime (dtReference);
 
@@ -673,6 +682,9 @@ void CronTest::test18 ()
 
   alarmExpect = dtReference;
   alarmExpect.setDayOfMonth (alarmExpect.getDayOfMonth () + 1);
+  alarmExpect.setHours (0);
+  alarmExpect.setMinutes (0);
+  alarmExpect.setSeconds (0);
 
   cron1.setCurrentDateTime (dtReference);
 

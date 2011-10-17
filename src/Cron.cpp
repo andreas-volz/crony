@@ -320,17 +320,16 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
   return result;
 }
 
-// TODO
 bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
 {
   LOG4CXX_TRACE (mLogger, "checkDayOfWeek, recheck=" << recheck);
   
   bool result = true;
   
-  // hit all days (*)
+  // hit all days (*) - samo as hit all days of month!
   if (mDayOfWeekList.size () == 0)
   {
-    DayOfMonth tmp_dayofmonth = mCurrent.getDayOfMonth ();
+    DayOfWeek tmp_dayofmonth = mCurrent.getDayOfMonth ();
       
     if (recheck)
     {
