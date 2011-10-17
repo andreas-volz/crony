@@ -471,7 +471,7 @@ void CronTest::test13 ()
 
   alarmExpect = mdtReference;
   alarmExpect.setYear (mdtReference.getYear () + 1);
-  alarmExpect.setMonth (DateTime::January);
+  alarmExpect.setMonth (mdtReference.getMonth () - 1);
   alarmExpect.setDayOfMonth (1);
   alarmExpect.setHours (0);
   alarmExpect.setMinutes (0);

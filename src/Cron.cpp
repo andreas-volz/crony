@@ -294,11 +294,22 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
       }
     }
 
+    // if time on past handle as time not hit
+    if (monthDiff < 0)
+    {
+      monthDiff = MaxMonthDiff;
+    }
+
     if (monthDiff == MaxMonthDiff)
     {
       LOG4CXX_INFO (mLogger, "not possible to hit month in past: adding years");
       alarmTime.setMonth (*min_element (mMonthList.begin (), mMonthList.end ()));
-      result = false;
+      
+      // only repeat last step only once
+      if (!recheck)
+      {
+        result = false;
+      }
     }
     else
     {
@@ -371,12 +382,22 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
       }
     }
 
+    // if time on past handle as time not hit
+    if (dayofmonthDiff < 0)
+    {
+      dayofmonthDiff = MaxDayOfMonthDiff;
+    }
+    
     if (dayofmonthDiff == MaxDayOfMonthDiff)
     {
       LOG4CXX_INFO (mLogger, "not possible to hit hour in past: adding month");
       alarmTime.setMonth (*min_element (mMonthList.begin (), mMonthList.end ()));
 
-      result = false;
+      // only repeat last step only once
+      if (!recheck)
+      {
+        result = false;
+      }
     }
     else
     {
