@@ -18,6 +18,7 @@ CronTab::CronTab (bool autotimer) :
 {
 }
 
+// TODO: think about handling Cron as pointer type...
 void CronTab::add (const Cron &cron)
 {
   // TODO: potential problem if two cron with same time...
