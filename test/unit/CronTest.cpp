@@ -711,8 +711,12 @@ void CronTest::test19 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setMinutes (alarmExpect.getMinutes () + 1);
+  alarmExpect.setHours (alarmExpect.getHours () + 1);
 
+  std::list <Minute> minuteList;
+  minuteList.push_back (mdtReference.getMinutes ());
+  cron1.setMinuteList (minuteList);
+  
   cron1.setCurrentDateTime (mdtReference);
 
   try

@@ -628,6 +628,7 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
     if (minuteDiff == 0)
     {
       minuteDiff = 1;
+      result = false;
     }
 
     // if time on past handle as time not hit

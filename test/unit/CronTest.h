@@ -68,7 +68,7 @@ class CronTest : public CPPUNIT_NS::TestFixture
   // hit next dayofweek (at year border; dayofweek in locale future)
   CPPUNIT_TEST (test18);
 
-  // hit each minute
+  // hit next hour because minute is equal
   CPPUNIT_TEST (test19);
 
   // hit next year after (+2)
