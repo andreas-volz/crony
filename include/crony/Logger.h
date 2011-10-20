@@ -12,6 +12,8 @@
 #include "log4cxx/propertyconfigurator.h"
 #include "log4cxx/helpers/exception.h"
 
+namespace crony {
+  
 class Logger
 {
 public:
@@ -30,6 +32,8 @@ public:
 private:
   log4cxx::LoggerPtr mLogger;
 };
+
+} // end namespace crony
 
 #else // no LOG4CXX available...
 
@@ -54,12 +58,16 @@ private:
 #define LOG4CXX_FATAL(logger, expression)
 #endif // LOG2NIX_ACTIVE
 
+namespace crony {
+
 class Logger
 {
 public:
   Logger (const std::string& name) {}
   Logger (const std::wstring& name) {}
 };
+
+} // end namespace crony
 
 #endif // HAVE_LOG4CXX
 

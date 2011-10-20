@@ -44,8 +44,6 @@ AC_SUBST(PACKAGE_DOC_DIR)
 AC_DEFINE_UNQUOTED(PACKAGE_DATA_DIR, "${packageprefix}/${packagedatadir}","")
 AC_DEFINE_UNQUOTED(SYSTEM_DATA_DIR, "${packageprefix}/${systemdatadir}","")
 AC_DEFINE_UNQUOTED(PACKAGE_DOC_DIR, "${packageprefix}/${packagedocdir}","")
-AC_DEFINE_UNQUOTED(PACKAGE_PLUGINS_DIR, "${packageprefix}/${packagepluginsdir}","")
-AC_DEFINE_UNQUOTED(SYSTEM_PLUGINS_DIR, "${packageprefix}/${systempluginsdir}","")
 AC_DEFINE_UNQUOTED(PACKAGE_SOURCE_DIR, "${packagesrcdir}","")
 
 
