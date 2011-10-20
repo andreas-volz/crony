@@ -301,11 +301,6 @@ void CronTest::test8 ()
   
   cron1.setCurrentDateTime (mdtReference);
 
-  std::list <Minute> minuteList;
-  minuteList.push_back (mdtReference.getMinutes ());  
-  minuteList.push_back (mdtReference.getMinutes () + 1);
-  cron1.setMinuteList (minuteList);
-
   try
   {
     cerr << endl; // only for log formating

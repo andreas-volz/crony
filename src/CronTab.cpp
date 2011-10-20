@@ -41,10 +41,11 @@ time_t CronTab::calcNextTimer ()
 
     cron.setCurrentDateTime (mCurrent);
     DateTime hittime = cron.calcNextHit ();
-    LOG4CXX_DEBUG (mLogger, "Calc next hit for: " << hittime);
-
+    
     if (hittime > mCurrent)
     {
+      LOG4CXX_DEBUG (mLogger, "Calc next Timer for: " << hittime - mCurrent);
+      
       mTable.erase (cr_it);
       mTable[hittime] = cron;
       return hittime - mCurrent;
