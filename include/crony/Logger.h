@@ -1,5 +1,5 @@
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef CRONY_LOGGER_H
+#define CRONY_LOGGER_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -71,4 +71,4 @@ public:
 
 #endif // HAVE_LOG4CXX
 
-#endif // LOGGER_H
+#endif // CRONY_LOGGER_H

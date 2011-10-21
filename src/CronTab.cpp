@@ -25,8 +25,10 @@ void CronTab::add (const Cron &cron)
   mTable[cron.calcNextHit ()] = cron;
 }
 
-time_t CronTab::calcNextTimer ()
+CronHit CronTab::calcNextTimer ()
 {
+  CronHit returnCronHit;
+  
   if (mAutotimer)
   {
     mCurrent.current ();
@@ -44,15 +46,34 @@ time_t CronTab::calcNextTimer ()
     
     if (hittime > mCurrent)
     {
-      LOG4CXX_DEBUG (mLogger, "Calc next Timer for: " << hittime - mCurrent);
+      LOG4CXX_DEBUG (mLogger, "Calc next Timer in: " << hittime - mCurrent << " sec");
+      LOG4CXX_DEBUG (mLogger, "Calc next Timer for: " << hittime);
+
+      returnCronHit.timer = hittime - mCurrent;
+      returnCronHit.command = cron.getCommand ();
       
       mTable.erase (cr_it);
       mTable[hittime] = cron;
-      return hittime - mCurrent;
+      return returnCronHit;
     }
   }
 
-  return 0;
+  /*map <DateTime, Cron>::iterator firstElement = mTable.begin ();
+
+  if (firstElement != mTable.end ())
+  {
+    DateTime keytime = firstElement->first;
+    Cron cron = firstElement->second;
+
+      LOG4CXX_DEBUG (mLogger, "Calc next Timer in: " << keytime - mCurrent << " sec");
+      LOG4CXX_DEBUG (mLogger, "Calc next Timer for: " << keytime);
+
+    returnCronHit.timer = keytime - mCurrent;
+    returnCronHit.command = cron.getCommand ();
+  }*/
+
+  // TODO: throw exception?
+  return returnCronHit;
 }
 
 void CronTab::setCurrentDateTime (DateTime current)

@@ -28,7 +28,7 @@ void CronTabTest::test1 ()
 {
   CronTab cronTab (false);
   Cron cron1;
-  time_t alarmCalc;
+  CronHit alarmCalc;
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
@@ -43,7 +43,7 @@ void CronTabTest::test1 ()
   cerr << endl; // only for log formating
   alarmCalc = cronTab.calcNextTimer ();
 
-  CPPUNIT_ASSERT_EQUAL (alarmExpect.getTimestamp (), mdtReference.getTimestamp () + alarmCalc);
+  CPPUNIT_ASSERT_EQUAL (alarmExpect.getTimestamp (), mdtReference.getTimestamp () + alarmCalc.timer);
 
   // check 2
   mdtReference.setMinutes (mdtReference.getMinutes () + 1);
@@ -54,14 +54,14 @@ void CronTabTest::test1 ()
   cerr << endl; // only for log formating
   alarmCalc = cronTab.calcNextTimer ();
 
-  CPPUNIT_ASSERT_EQUAL (alarmExpect.getTimestamp (), mdtReference.getTimestamp () + alarmCalc);
+  CPPUNIT_ASSERT_EQUAL (alarmExpect.getTimestamp (), mdtReference.getTimestamp () + alarmCalc.timer);
 }
 
 void CronTabTest::test2 ()
 {
   CronTab cronTab (false);
   Cron cron1;
-  time_t alarmCalc;
+  CronHit alarmCalc;
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
@@ -83,7 +83,7 @@ void CronTabTest::test2 ()
   cerr << endl; // only for log formating
   alarmCalc = cronTab.calcNextTimer ();
 
-  CPPUNIT_ASSERT_EQUAL (alarmExpect.getTimestamp (), mdtReference.getTimestamp () + alarmCalc);
+  CPPUNIT_ASSERT_EQUAL (alarmExpect.getTimestamp (), mdtReference.getTimestamp () + alarmCalc.timer);
 
   // check 2
   mdtReference.setMinutes (mdtReference.getMinutes () + 2);
@@ -97,5 +97,5 @@ void CronTabTest::test2 ()
   cerr << endl; // only for log formating
   alarmCalc = cronTab.calcNextTimer ();
 
-  CPPUNIT_ASSERT_EQUAL (alarmExpect.getTimestamp (), mdtReference.getTimestamp () + alarmCalc);
+  CPPUNIT_ASSERT_EQUAL (alarmExpect.getTimestamp (), mdtReference.getTimestamp () + alarmCalc.timer);
 }

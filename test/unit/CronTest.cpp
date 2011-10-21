@@ -140,7 +140,6 @@ void CronTest::test4 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  // TODO: this is wrong below!!
   alarmExpect.setDayOfMonth (mdtReference.getDayOfMonth () + (mdtReference.getDayOfWeek () - mdtReference.getDayOfWeek () + 1));
   alarmExpect.setHours (0);
   alarmExpect.setMinutes (0);
@@ -770,5 +769,91 @@ void CronTest::test20 ()
     return;
   }
   
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
+
+void CronTest::test21 ()
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setDayOfMonth (mdtReference.getDayOfMonth () + (mdtReference.getDayOfWeek () - mdtReference.getDayOfWeek () + 1));
+  alarmExpect.setHours (8);
+  alarmExpect.setMinutes (45);
+  alarmExpect.setSeconds (0);
+  
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <DayOfWeek> dayOfWeekList;
+  dayOfWeekList.push_back (mdtReference.getDayOfWeek () + 1);
+  cron1.setDayOfWeekList (dayOfWeekList);
+
+  std::list <Hour> hourList;
+  hourList.push_back (8);
+  cron1.setHourList (hourList);
+
+  std::list <Minute> minuteList;
+  minuteList.push_back (45);
+  cron1.setMinuteList (minuteList);
+  
+  try
+  {
+    cerr << endl; // only for log formating
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
+
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
+
+void CronTest::test22 ()
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+
+  alarmExpect = mdtReference;
+  alarmExpect.setDayOfMonth (mdtReference.getDayOfMonth () + 1);
+  alarmExpect.setHours (8);
+  alarmExpect.setMinutes (45);
+  alarmExpect.setSeconds (0);
+
+  cron1.setCurrentDateTime (mdtReference);
+
+  std::list <DayOfMonth> dayOfMonthList;
+  dayOfMonthList.push_back (mdtReference.getDayOfMonth () + 1);
+  cron1.setDayOfMonthList (dayOfMonthList);
+
+  std::list <Hour> hourList;
+  hourList.push_back (8);
+  cron1.setHourList (hourList);
+
+  std::list <Minute> minuteList;
+  minuteList.push_back (45);
+  cron1.setMinuteList (minuteList);
+
+  try
+  {
+    cerr << endl; // only for log formating
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
+
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }

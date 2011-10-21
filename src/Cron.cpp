@@ -329,19 +329,23 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
   // hit all days (*) - samo as hit all days of month!
   if (mDayOfWeekList.size () == 0)
   {
-    DayOfWeek tmp_dayofmonth = mCurrent.getDayOfMonth ();
-      
-    if (recheck)
+    DayOfMonth tmp;
+
+    if (mCurrent.getMonth () != alarmTime.getMonth ())
     {
-      ++tmp_dayofmonth;
+      tmp = 1;
+    }
+    else
+    {
+      tmp = mCurrent.getDayOfMonth ();
     }
     
-    alarmTime.setDayOfMonth (tmp_dayofmonth);
-
     if (recheck)
     {
-      result = false;
+      ++tmp;
     }
+    
+    alarmTime.setDayOfMonth (tmp);
   }
   else
   {
@@ -670,6 +674,16 @@ bool Cron::isDayOfWeekMode () const
   }
 
   return false;
+}
+
+void Cron::setCommand (const std::string &command)
+{
+  mCommand = command;
+}
+
+std::string Cron::getCommand () const
+{
+  return mCommand;
 }
 
 } // end namespace crony

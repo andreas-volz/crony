@@ -10,6 +10,17 @@
 
 namespace crony {
 
+class CronHit
+{
+public:
+  CronHit () : timer (0) {}
+  
+  time_t timer;
+  std::string command;
+  
+private:
+};
+  
 class CronTab
 {
 public:
@@ -17,7 +28,7 @@ public:
   
   void add (const Cron &cron);
 
-  time_t calcNextTimer (); // const?
+  CronHit calcNextTimer (); // const?
 
   /*!
    * This function allows to set another current reference time.

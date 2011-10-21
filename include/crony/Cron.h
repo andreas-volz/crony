@@ -95,6 +95,10 @@ public:
 
   DateTime calcNextHit () const;
 
+  void setCommand (const std::string &command);
+
+  std::string getCommand () const;
+
   /*!
    * This function allows to set another current reference time.
    * Currently used to enable unit testing.
@@ -126,6 +130,8 @@ private:
   std::list <Minute> mMinuteList;
 
   DateTime mCurrent;
+
+  std::string mCommand;
 
   Logger mLogger;
 };
