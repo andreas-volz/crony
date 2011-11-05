@@ -242,10 +242,8 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
 {  
   LOG4CXX_TRACE (mLogger, "checkMonth, recheck=" << recheck);
 
-  bool isFuture = mCurrent.getYear () != alarmTime.getYear ();
-  //bool isPast = mCurrent.getYear () < alarmTime.getYear ();
-  //bool isCurrent = mCurrent.getYear () == alarmTime.getYear ();
-  
+  bool isCurrent = mCurrent.getYear () == alarmTime.getYear ();
+
   bool result = true;
   
   // hit all months (*)
@@ -253,7 +251,7 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
   {
     Month tmp;
 
-    if (isFuture /*|| isPast*/)
+    if (!isCurrent)
     {
       tmp = DateTime::January;
     }
@@ -272,7 +270,7 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
   }
   else
   {
-    if (isFuture /*|| isPast*/)
+    if (!isCurrent)
     {
       Month tmp = *min_element (mMonthList.begin (), mMonthList.end ()) - Cron::MonthShift;
       alarmTime.setMonth (tmp);
@@ -329,11 +327,6 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
     }
   }
 
-  /*if (isPast)
-  {
-    result = false;
-  }*/
-
   return result;
 }
 
@@ -341,7 +334,7 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
 {
   LOG4CXX_TRACE (mLogger, "checkDayOfWeek, recheck=" << recheck);
 
-  bool isFuture = mCurrent.getMonth () != alarmTime.getMonth ();
+  bool isCurrent = mCurrent.getMonth () == alarmTime.getMonth ();
   
   bool result = true;
   
@@ -350,7 +343,7 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
   {
     DayOfMonth tmp;
 
-    if (isFuture)
+    if (!isCurrent)
     {
       tmp = 1;
     }
@@ -369,7 +362,7 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
   }
   else
   {
-    if (isFuture)
+    if (!isCurrent)
     {
       DayOfMonth tmp = *min_element (mMonthList.begin (), mMonthList.end ());
       alarmTime.setMonth (tmp);
@@ -440,7 +433,7 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
 {
   LOG4CXX_TRACE (mLogger, "checkDayOfMonth, recheck=" << recheck);
 
-  bool isFuture = mCurrent.getMonth () != alarmTime.getMonth ();
+  bool isCurrent = mCurrent.getMonth () == alarmTime.getMonth ();
   
   bool result = true;
   
@@ -449,7 +442,7 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
   {
     DayOfMonth tmp;
 
-    if (isFuture)
+    if (!isCurrent)
     {
       tmp = 1;
     }
@@ -468,7 +461,7 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
   }
   else
   {
-    if (isFuture)
+    if (!isCurrent)
     {
       DayOfMonth tmp = *min_element (mDayOfMonthList.begin (), mDayOfMonthList.end ());
       alarmTime.setDayOfMonth (tmp);
@@ -531,7 +524,7 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
 {
   LOG4CXX_TRACE (mLogger, "checkHour, recheck=" << recheck);
 
-  bool isFuture = mCurrent.getDayOfMonth () != alarmTime.getDayOfMonth ();
+  bool isCurrent = mCurrent.getDayOfMonth () == alarmTime.getDayOfMonth ();
   
   bool result = true;
   
@@ -540,7 +533,7 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
   {
     Hour tmp;
       
-    if (isFuture)
+    if (!isCurrent)
     {
       tmp = 0;
     }
@@ -559,7 +552,7 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
   }
   else
   {
-    if (isFuture)
+    if (!isCurrent)
     {
       Hour tmp = *min_element (mHourList.begin (), mHourList.end ());
       alarmTime.setHours (tmp);
@@ -622,7 +615,7 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
 {
   LOG4CXX_TRACE (mLogger, "checkMinute, recheck=" << recheck);
 
-  bool isFuture = mCurrent.getHours () != alarmTime.getHours ();
+  bool isCurrent = mCurrent.getHours () == alarmTime.getHours ();
   
   bool result = true;
   
@@ -631,7 +624,7 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
   {
     Minute tmp;
       
-    if (isFuture)
+    if (!isCurrent)
     {
       tmp = 0;
     }
@@ -650,7 +643,7 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
   }
   else
   {
-    if (isFuture)
+    if (!isCurrent)
     {
       LOG4CXX_INFO (mLogger, "not possible to hit minute in past: adding hours");
       Minute tmp = *min_element (mMinuteList.begin (), mMinuteList.end ());
