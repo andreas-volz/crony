@@ -38,9 +38,6 @@ public:
     November,
     December
   };
-
-    // static variables
-  static const int YearShift = 1900;
   
   // constructor
   DateTime ();

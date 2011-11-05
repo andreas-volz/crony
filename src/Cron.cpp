@@ -201,14 +201,14 @@ bool Cron::checkYear (DateTime &alarmTime, bool recheck) const
     {
       Year year = *y_it;
 
-      Year tmp = year - (mCurrent.getYear () + DateTime::YearShift); // convert to struct tm format
+      Year tmp = year - (mCurrent.getYear () + Cron::YearShift); // convert to struct tm format
 
       // check for nearest value above
       if ((tmp >= 0) && (tmp <= yearDiff))
       {
         if (recheck)
         {
-          if (year > (alarmTime.getYear () + DateTime::YearShift))
+          if (year > (alarmTime.getYear () + Cron::YearShift))
           {
             yearDiff = tmp;
           }
@@ -241,6 +241,8 @@ bool Cron::checkYear (DateTime &alarmTime, bool recheck) const
 bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
 {  
   LOG4CXX_TRACE (mLogger, "checkMonth, recheck=" << recheck);
+
+  bool isFuture = mCurrent.getYear () != alarmTime.getYear ();
   
   bool result = true;
   
@@ -249,7 +251,7 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
   {
     Month tmp;
 
-    if (mCurrent.getYear () != alarmTime.getYear ())
+    if (isFuture)
     {
       tmp = DateTime::January;
     }
@@ -264,56 +266,63 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
     }
     
     alarmTime.setMonth (tmp);
+    LOG4CXX_DEBUG (mLogger, "setMonth/all = " << tmp);
   }
   else
   {
-    int monthDiff = MaxMonthDiff;
-    for (list <Month>::const_iterator m_it = mMonthList.begin ();
-         m_it != mMonthList.end ();
-         ++m_it)
+    if (isFuture)
     {
-      Month month = *m_it;
-      --month; // convert to struct tm format
-
-      Month tmp = month - mCurrent.getMonth ();
-
-      // check for nearest value above
-      if (tmp <= monthDiff)
+      Month tmp = *min_element (mMonthList.begin (), mMonthList.end ()) - Cron::MonthShift;
+      alarmTime.setMonth (tmp);
+      LOG4CXX_DEBUG (mLogger, "setMonth/minimum = " << tmp);
+    }
+    else
+    {
+      int monthDiff = MaxMonthDiff;
+      for (list <Month>::const_iterator m_it = mMonthList.begin ();
+           m_it != mMonthList.end ();
+           ++m_it)
       {
-        if (recheck)
+        Month month = *m_it;
+
+        Month tmp = month - mCurrent.getMonth ();
+
+        // check for nearest value above
+        if (tmp <= monthDiff)
         {
-          if (month > mCurrent.getMonth ())
+          if (recheck)
+          {
+            if (month > mCurrent.getMonth ())
+            {
+              monthDiff = tmp;
+            }
+          }
+          else
           {
             monthDiff = tmp;
           }
         }
-        else
-        {
-          monthDiff = tmp;
-        }
       }
-    }
 
-    // if time on past handle as time not hit
-    if (monthDiff < 0)
-    {
-      monthDiff = MaxMonthDiff;
-    }
-
-    if (monthDiff == MaxMonthDiff)
-    {
-      LOG4CXX_INFO (mLogger, "not possible to hit month in past: adding years");
-      alarmTime.setMonth (*min_element (mMonthList.begin (), mMonthList.end ()));
-      
-      // only repeat last step only once
-      if (!recheck)
+      // if time on past handle as time not hit
+      if (monthDiff < 0)
       {
+        monthDiff = MaxMonthDiff;
+      }
+
+      if ((monthDiff == MaxMonthDiff) && (!recheck))
+      {
+        LOG4CXX_INFO (mLogger, "not possible to hit month in past: adding years");
+        
+        // only repeat last step only once
         result = false;
       }
-    }
-    else
-    {
-      alarmTime.setMonth (mCurrent.getMonth () + monthDiff);
+      else
+      {
+        Month tmp = mCurrent.getMonth () + monthDiff - Cron::MonthShift;
+        alarmTime.setMonth (tmp);
+        LOG4CXX_DEBUG (mLogger, "setMonth/specific = " << tmp);
+      }
     }
   }
 
@@ -323,6 +332,8 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
 bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
 {
   LOG4CXX_TRACE (mLogger, "checkDayOfWeek, recheck=" << recheck);
+
+  bool isFuture = mCurrent.getMonth () != alarmTime.getMonth ();
   
   bool result = true;
   
@@ -331,7 +342,7 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
   {
     DayOfMonth tmp;
 
-    if (mCurrent.getMonth () != alarmTime.getMonth ())
+    if (isFuture)
     {
       tmp = 1;
     }
@@ -346,65 +357,71 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
     }
     
     alarmTime.setDayOfMonth (tmp);
+    LOG4CXX_DEBUG (mLogger, "setDayOfMonth/all = " << tmp);
   }
   else
   {
-    int dayofmonthDiff = MaxDayOfMonthDiff;
-    DayOfMonth dayofmonth = mCurrent.getDayOfMonth ();
-    
-    for (list <DayOfWeek>::const_iterator dow_it = mDayOfWeekList.begin ();
-         dow_it != mDayOfWeekList.end ();
-         ++dow_it)
+    if (isFuture)
     {
-      DayOfWeek dayofweek = *dow_it;
-      DayOfMonth tmp;
-      
-      if (dayofweek >= mCurrent.getDayOfWeek ())
+      DayOfMonth tmp = *min_element (mMonthList.begin (), mMonthList.end ());
+      alarmTime.setMonth (tmp);
+      LOG4CXX_DEBUG (mLogger, "setDayOfMonth/minimum = " << tmp);
+    }
+    else
+    {
+      int dayofmonthDiff = MaxDayOfMonthDiff;
+      DayOfMonth dayofmonth = mCurrent.getDayOfMonth ();
+      for (list <DayOfWeek>::const_iterator dow_it = mDayOfWeekList.begin ();
+           dow_it != mDayOfWeekList.end ();
+           ++dow_it)
       {
-        tmp = mCurrent.getDayOfMonth () + (dayofweek - mCurrent.getDayOfWeek ());
-      }
-      else
-      {
-        tmp = mCurrent.getDayOfMonth () + (dayofweek - mCurrent.getDayOfWeek ()) + MaxDayOfWeekDiff;
-      }
-
-      // check for nearest value above
-      if (tmp <= dayofmonthDiff)
-      {
-        if (recheck)
+        DayOfWeek dayofweek = *dow_it;
+        DayOfMonth tmp;
+        
+        if (dayofweek >= mCurrent.getDayOfWeek ())
         {
-          if (dayofmonth > mCurrent.getDayOfMonth ())
+          tmp = mCurrent.getDayOfMonth () + (dayofweek - mCurrent.getDayOfWeek ());
+        }
+        else
+        {
+          tmp = mCurrent.getDayOfMonth () + (dayofweek - mCurrent.getDayOfWeek ()) + MaxDayOfWeekDiff;
+        }
+
+        // check for nearest value above
+        if (tmp <= dayofmonthDiff)
+        {
+          if (recheck)
+          {
+            if (dayofmonth > mCurrent.getDayOfMonth ())
+            {
+              dayofmonthDiff = tmp;
+            }
+          }
+          else
           {
             dayofmonthDiff = tmp;
           }
         }
-        else
-        {
-          dayofmonthDiff = tmp;
-        }
       }
-    }
 
-    // if time on past handle as time not hit
-    if (dayofmonthDiff < 0)
-    {
-      dayofmonthDiff = MaxDayOfMonthDiff;
-    }
-    
-    if (dayofmonthDiff == MaxDayOfMonthDiff)
-    {
-      LOG4CXX_INFO (mLogger, "not possible to hit hour in past: adding month");
-      alarmTime.setMonth (*min_element (mMonthList.begin (), mMonthList.end ()));
-
-      // only repeat last step only once
-      if (!recheck)
+      // if time on past handle as time not hit
+      if (dayofmonthDiff < 0)
       {
+        dayofmonthDiff = MaxDayOfMonthDiff;
+      }
+      
+      if ((dayofmonthDiff == MaxDayOfMonthDiff) && (!recheck))
+      {
+        LOG4CXX_INFO (mLogger, "not possible to hit hour in past: adding month");
+        
+        // only repeat last step only once
         result = false;
       }
-    }
-    else
-    {
-      alarmTime.setDayOfMonth (dayofmonthDiff);
+      else
+      {
+        alarmTime.setDayOfMonth (dayofmonthDiff);
+        LOG4CXX_DEBUG (mLogger, "setDayOfMonth/specific = " << dayofmonthDiff);
+      }
     }
   }
 
@@ -414,6 +431,8 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
 bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
 {
   LOG4CXX_TRACE (mLogger, "checkDayOfMonth, recheck=" << recheck);
+
+  bool isFuture = mCurrent.getMonth () != alarmTime.getMonth ();
   
   bool result = true;
   
@@ -422,7 +441,7 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
   {
     DayOfMonth tmp;
 
-    if (mCurrent.getMonth () != alarmTime.getMonth ())
+    if (isFuture)
     {
       tmp = 1;
     }
@@ -437,55 +456,63 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
     }
     
     alarmTime.setDayOfMonth (tmp);
+    LOG4CXX_DEBUG (mLogger, "setDayOfMonth/all = " << tmp);
   }
   else
   {
-    int dayofmonthDiff = MaxDayOfMonthDiff;
-    for (list <DayOfMonth>::const_iterator dom_it = mDayOfMonthList.begin ();
-         dom_it != mDayOfMonthList.end ();
-         ++dom_it)
+    if (isFuture)
     {
-      DayOfMonth dayofmonth = *dom_it;
-
-      DayOfMonth tmp = dayofmonth - mCurrent.getDayOfMonth ();
-
-      // check for nearest value above
-      if (tmp <= dayofmonthDiff)
+      DayOfMonth tmp = *min_element (mDayOfMonthList.begin (), mDayOfMonthList.end ());
+      alarmTime.setDayOfMonth (tmp);
+      LOG4CXX_DEBUG (mLogger, "setDayOfMonth/minimum = " << tmp);
+    }
+    else
+    {
+      int dayofmonthDiff = MaxDayOfMonthDiff;
+      for (list <DayOfMonth>::const_iterator dom_it = mDayOfMonthList.begin ();
+           dom_it != mDayOfMonthList.end ();
+           ++dom_it)
       {
-        if (recheck)
+        DayOfMonth dayofmonth = *dom_it;
+
+        DayOfMonth tmp = dayofmonth - mCurrent.getDayOfMonth ();
+
+        // check for nearest value above
+        if (tmp <= dayofmonthDiff)
         {
-          if (dayofmonth > mCurrent.getDayOfMonth ())
+          if (recheck)
+          {
+            if (dayofmonth > mCurrent.getDayOfMonth ())
+            {
+              dayofmonthDiff = tmp;
+            }
+          }
+          else
           {
             dayofmonthDiff = tmp;
           }
         }
-        else
-        {
-          dayofmonthDiff = tmp;
-        }
       }
-    }
 
-    // if time on past handle as time not hit
-    if (dayofmonthDiff < 0)
-    {
-      dayofmonthDiff = MaxDayOfMonthDiff;
-    }
-
-    if (dayofmonthDiff == MaxDayOfMonthDiff)
-    {
-      LOG4CXX_INFO (mLogger, "not possible to hit day of month in past: adding month");
-      alarmTime.setDayOfMonth (*min_element (mDayOfMonthList.begin (), mDayOfMonthList.end ()));
-      
-      // only repeat last step only once
-      if (!recheck)
+      // if time on past handle as time not hit
+      if (dayofmonthDiff < 0)
       {
+        dayofmonthDiff = MaxDayOfMonthDiff;
+      }
+
+      if ((dayofmonthDiff == MaxDayOfMonthDiff) && (!recheck))
+      {
+        LOG4CXX_INFO (mLogger, "not possible to hit day of month in past: adding month");
+
+        // only repeat last step only once
         result = false;
       }
-    }
-    else
-    {
-      alarmTime.setDayOfMonth (mCurrent.getDayOfMonth () + dayofmonthDiff);
+      else
+      {
+        DayOfMonth tmp = mCurrent.getDayOfMonth () + dayofmonthDiff;
+        alarmTime.setDayOfMonth (tmp);
+        LOG4CXX_DEBUG (mLogger, "setDayOfMonth/specific = " << tmp);
+      }
     }
   }
 
@@ -495,6 +522,8 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
 bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
 {
   LOG4CXX_TRACE (mLogger, "checkHour, recheck=" << recheck);
+
+  bool isFuture = mCurrent.getDayOfMonth () != alarmTime.getDayOfMonth ();
   
   bool result = true;
   
@@ -503,7 +532,7 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
   {
     Hour tmp;
       
-    if (mCurrent.getDayOfMonth () != alarmTime.getDayOfMonth ())
+    if (isFuture)
     {
       tmp = 0;
     }
@@ -518,55 +547,63 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
     }
     
     alarmTime.setHours (tmp);
+    LOG4CXX_DEBUG (mLogger, "checkHour, setHours/all = " << tmp);
   }
   else
   {
-    int hourDiff = MaxHourDiff;
-    for (list <Hour>::const_iterator h_it = mHourList.begin ();
-         h_it != mHourList.end ();
-         ++h_it)
+    if (isFuture)
     {
-      Hour hour = *h_it;
-
-      Hour tmp = hour - mCurrent.getHours ();
-
-      // check for nearest value above
-      if (tmp <= hourDiff)
+      Hour tmp = *min_element (mHourList.begin (), mHourList.end ());
+      alarmTime.setHours (tmp);
+      LOG4CXX_DEBUG (mLogger, "checkHour, setHours/minimum = " << tmp);
+    }
+    else
+    {
+      int hourDiff = MaxHourDiff;
+      for (list <Hour>::const_iterator h_it = mHourList.begin ();
+           h_it != mHourList.end ();
+           ++h_it)
       {
-        if (recheck)
+        Hour hour = *h_it;
+
+        Hour tmp = hour - mCurrent.getHours ();
+        
+        // check for nearest value above
+        if (tmp <= hourDiff)
         {
-          if (hour > mCurrent.getHours ())
+          if (recheck)
+          {
+            if (hour > mCurrent.getHours ())
+            {
+              hourDiff = tmp;
+            }
+          }
+          else
           {
             hourDiff = tmp;
           }
         }
-        else
-        {
-          hourDiff = tmp;
-        }
       }
-    }
-
-    // if time on past handle as time not hit
-    if (hourDiff < 0)
-    {
-      hourDiff = MaxHourDiff;
-    }
-
-    if (hourDiff == MaxHourDiff)
-    {
-      LOG4CXX_INFO (mLogger, "not possible to hit hour in past: adding days");
-      alarmTime.setHours (*min_element (mHourList.begin (), mHourList.end ()));
-
-      // only repeat last step only once
-      if (!recheck)
+   
+      // if time on past handle as time not hit
+      if (hourDiff < 0)
       {
+        hourDiff = MaxHourDiff;
+      }
+
+      if ((hourDiff == MaxHourDiff) && (!recheck))
+      {
+        LOG4CXX_INFO (mLogger, "not possible to hit hour in past: adding days");
+
+        // only repeat last step only once
         result = false;
       }
-    }
-    else
-    {
-      alarmTime.setHours (mCurrent.getHours () + hourDiff);
+      else
+      {
+        Hour tmp = mCurrent.getHours () + hourDiff;
+        alarmTime.setHours (tmp);
+        LOG4CXX_DEBUG (mLogger, "checkHour, setHours/specific = " << tmp);
+      }
     }
   }
 
@@ -576,6 +613,8 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
 bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
 {
   LOG4CXX_TRACE (mLogger, "checkMinute, recheck=" << recheck);
+
+  bool isFuture = mCurrent.getHours () != alarmTime.getHours ();
   
   bool result = true;
   
@@ -584,7 +623,7 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
   {
     Minute tmp;
       
-    if (mCurrent.getHours () != alarmTime.getHours ())
+    if (isFuture)
     {
       tmp = 0;
     }
@@ -599,62 +638,71 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
     }
     
     alarmTime.setMinutes (tmp);
+    LOG4CXX_DEBUG (mLogger, "setMinute/all = " << tmp);
   }
   else
   {
-    int minuteDiff = MaxMinuteDiff;
-    for (list <Minute>::const_iterator m_it = mMinuteList.begin ();
-         m_it != mMinuteList.end ();
-         ++m_it)
+    if (isFuture)
     {
-      Minute minute = *m_it;
-
-      Minute tmp = minute - mCurrent.getMinutes ();
-
-      // check for nearest value above
-      if (tmp <= minuteDiff)
+      LOG4CXX_INFO (mLogger, "not possible to hit minute in past: adding hours");
+      Minute tmp = *min_element (mMinuteList.begin (), mMinuteList.end ());
+      alarmTime.setMinutes (tmp);
+      LOG4CXX_DEBUG (mLogger, "setMinute/minumum = " << tmp);
+    }
+    else
+    {
+      int minuteDiff = MaxMinuteDiff;
+      for (list <Minute>::const_iterator m_it = mMinuteList.begin ();
+           m_it != mMinuteList.end ();
+           ++m_it)
       {
-        if (recheck)
+        Minute minute = *m_it;
+
+        Minute tmp = minute - mCurrent.getMinutes ();
+
+        // check for nearest value above
+        if (tmp <= minuteDiff)
         {
-          if (minute > mCurrent.getMinutes ())
+          if (recheck)
+          {
+            if (minute > mCurrent.getMinutes ())
+            {
+              minuteDiff = tmp;
+            }
+          }
+          else
           {
             minuteDiff = tmp;
           }
         }
-        else
-        {
-          minuteDiff = tmp;
-        }
       }
-    }
 
-    // always hit next minute by adding one minute at current
-    if (minuteDiff == 0)
-    {
-      minuteDiff = 1;
-      result = false;
-    }
-
-    // if time on past handle as time not hit
-    if (minuteDiff < 0)
-    {
-      minuteDiff = MaxMinuteDiff;
-    }
-
-    if (minuteDiff == MaxMinuteDiff)
-    {
-      LOG4CXX_INFO (mLogger, "not possible to hit minute in past: adding hours");
-      alarmTime.setMinutes (*min_element (mMinuteList.begin (), mMinuteList.end ()));
-
-      // only repeat last step only once
-      if (!recheck)
+      // always hit next minute by adding one minute at current
+      if (minuteDiff == 0)
       {
+        minuteDiff = 1;
         result = false;
       }
-    }
-    else
-    {
-      alarmTime.setMinutes (mCurrent.getMinutes () + minuteDiff);
+
+      // if time on past handle as time not hit
+      if (minuteDiff < 0)
+      {
+        minuteDiff = MaxMinuteDiff;
+      }
+
+      if ((minuteDiff == MaxMinuteDiff) && (!recheck))
+      {
+        LOG4CXX_INFO (mLogger, "not possible to hit minute in past: adding hours");
+
+        // only repeat last step only once
+        result = false;
+      }
+      else
+      {
+        Minute tmp = mCurrent.getMinutes () + minuteDiff;
+        alarmTime.setMinutes (tmp);
+        LOG4CXX_DEBUG (mLogger, "setMinute/specific = " << tmp);
+      }
     }
   }
 

@@ -26,6 +26,9 @@ class DateTimeTest : public CPPUNIT_NS::TestFixture
   // test > operator
   CPPUNIT_TEST (test4);
 
+  // test if get returns what set gives
+  CPPUNIT_TEST (test5);
+
   CPPUNIT_TEST_SUITE_END ();
 
 public:
@@ -37,6 +40,7 @@ protected:
   void test2 ();
   void test3 ();
   void test4 ();
+  void test5 ();
 
 private:
   

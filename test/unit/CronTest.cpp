@@ -12,7 +12,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION (CronTest);
 void CronTest::setUp ()
 {
   // changing this reference time could influence result of tests!
-  mdtReference.setYear (2010 - DateTime::YearShift);
+  mdtReference.setYear (2010 - Cron::YearShift);
   mdtReference.setMonth (DateTime::April);
   mdtReference.setDayOfMonth (13);
   mdtReference.setHours (11);
@@ -42,7 +42,7 @@ void CronTest::test1 ()
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Year> yearList;
-  yearList.push_back (mdtReference.getYear () + DateTime::YearShift + 1);
+  yearList.push_back (mdtReference.getYear () + Cron::YearShift + 1);
   cron1.setYearList (yearList);
 
   try
@@ -78,7 +78,7 @@ void CronTest::test2 ()
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Month> monthList;
-  monthList.push_back (mdtReference.getMonth () + 1 + 1); // +1 for time format...
+  monthList.push_back (mdtReference.getMonth () + 1 + Cron::MonthShift);
   cron1.setMonthList (monthList);
 
   try
@@ -252,11 +252,11 @@ void CronTest::test7 ()
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Year> yearList;
-  yearList.push_back (mdtReference.getYear () + DateTime::YearShift + 1);
+  yearList.push_back (mdtReference.getYear () + Cron::YearShift + 1);
   cron1.setYearList (yearList);
 
   std::list <Month> monthList;
-  monthList.push_back (mdtReference.getMonth () + 1 + 1); // +1 for time format...
+  monthList.push_back (mdtReference.getMonth () + 1 + Cron::MonthShift);
   cron1.setMonthList (monthList);
 
   std::list <DayOfMonth> dayOfMonthList;
@@ -464,8 +464,8 @@ void CronTest::test13 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  alarmExpect.setYear (mdtReference.getYear () + 1);
-  alarmExpect.setMonth (mdtReference.getMonth () - 1);
+  //alarmExpect.setYear (mdtReference.getYear () + 1);
+ // alarmExpect.setMonth (mdtReference.getMonth () - 1);
   alarmExpect.setDayOfMonth (1);
   alarmExpect.setHours (0);
   alarmExpect.setMinutes (0);
@@ -474,7 +474,7 @@ void CronTest::test13 ()
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Month> monthList;
-  monthList.push_back (mdtReference.getMonth () - 1);
+  monthList.push_back (mdtReference.getMonth () - 2 + Cron::MonthShift);
   cron1.setMonthList (monthList);
 
   try
@@ -538,7 +538,7 @@ void CronTest::test15 ()
   DateTime alarmExpect;
 
   DateTime dtReference;
-  dtReference.setYear (2011 - DateTime::YearShift);
+  dtReference.setYear (2011 - Cron::YearShift);
   dtReference.setMonth (DateTime::September);
   dtReference.setDayOfMonth (30);
   dtReference.setHours (11);
@@ -581,7 +581,7 @@ void CronTest::test16 ()
   DateTime alarmExpect;
 
   DateTime dtReference;
-  dtReference.setYear (2011 - DateTime::YearShift);
+  dtReference.setYear (2011 - Cron::YearShift);
   dtReference.setMonth (DateTime::September);
   dtReference.setDayOfMonth (30);
   dtReference.setHours (11);
@@ -624,7 +624,7 @@ void CronTest::test17 ()
   DateTime alarmExpect;
 
   DateTime dtReference;
-  dtReference.setYear (2011 - DateTime::YearShift);
+  dtReference.setYear (2011 - Cron::YearShift);
   dtReference.setMonth (DateTime::December);
   dtReference.setDayOfMonth (31);
   dtReference.setHours (11);
@@ -667,7 +667,7 @@ void CronTest::test18 ()
   DateTime alarmExpect;
 
   DateTime dtReference;
-  dtReference.setYear (2011 - DateTime::YearShift);
+  dtReference.setYear (2011 - Cron::YearShift);
   dtReference.setMonth (DateTime::December);
   dtReference.setDayOfMonth (31);
   dtReference.setHours (11);
@@ -752,7 +752,7 @@ void CronTest::test20 ()
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Year> yearList;
-  yearList.push_back (mdtReference.getYear () + DateTime::YearShift + 2);
+  yearList.push_back (mdtReference.getYear () + Cron::YearShift + 2);
   cron1.setYearList (yearList);
 
   try

@@ -11,7 +11,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION (CronTabTest);
 
 void CronTabTest::setUp ()
 {
-  mdtReference.setYear (2010 - DateTime::YearShift);
+  mdtReference.setYear (2010 - Cron::YearShift);
   mdtReference.setMonth (DateTime::April);
   mdtReference.setDayOfMonth (13);
   mdtReference.setHours (11);

@@ -78,6 +78,10 @@ public:
     StepHour,
     StepMinute
   };
+
+    // static variables (compared to DateTime)
+  static const int YearShift = 1900;
+  static const int MonthShift = 1;  
   
   Cron ();
 
