@@ -75,8 +75,8 @@ void CronTabTest::test2 ()
   // check 1
   alarmExpect.setMinutes (mdtReference.getMinutes () + 2);
 
-  cout << "mdtReference: " << mdtReference << endl;
-  cout << "alarmExpect: " << alarmExpect << endl;
+  //cout << "mdtReference: " << mdtReference << endl;
+  //cout << "alarmExpect: " << alarmExpect << endl;
   
   cronTab.setCurrentDateTime (mdtReference);
 
@@ -89,8 +89,8 @@ void CronTabTest::test2 ()
   mdtReference.setMinutes (mdtReference.getMinutes () + 2);
   alarmExpect.setHours (mdtReference.getHours () + 1);
 
-  cout << "mdtReference: " << mdtReference << endl;
-  cout << "alarmExpect: " << alarmExpect << endl;
+  //cout << "mdtReference: " << mdtReference << endl;
+  //cout << "alarmExpect: " << alarmExpect << endl;
   
   cronTab.setCurrentDateTime (mdtReference);
 

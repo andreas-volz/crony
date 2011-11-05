@@ -243,6 +243,8 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
   LOG4CXX_TRACE (mLogger, "checkMonth, recheck=" << recheck);
 
   bool isFuture = mCurrent.getYear () != alarmTime.getYear ();
+  //bool isPast = mCurrent.getYear () < alarmTime.getYear ();
+  //bool isCurrent = mCurrent.getYear () == alarmTime.getYear ();
   
   bool result = true;
   
@@ -251,7 +253,7 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
   {
     Month tmp;
 
-    if (isFuture)
+    if (isFuture /*|| isPast*/)
     {
       tmp = DateTime::January;
     }
@@ -270,7 +272,7 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
   }
   else
   {
-    if (isFuture)
+    if (isFuture /*|| isPast*/)
     {
       Month tmp = *min_element (mMonthList.begin (), mMonthList.end ()) - Cron::MonthShift;
       alarmTime.setMonth (tmp);
@@ -284,6 +286,7 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
            ++m_it)
       {
         Month month = *m_it;
+        month -= Cron::MonthShift; // convert to DateTime format
 
         Month tmp = month - mCurrent.getMonth ();
 
@@ -314,17 +317,22 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
       {
         LOG4CXX_INFO (mLogger, "not possible to hit month in past: adding years");
         
-        // only repeat last step only once
+        // only repeat last step only once -> if !recheck
         result = false;
       }
       else
       {
-        Month tmp = mCurrent.getMonth () + monthDiff - Cron::MonthShift;
+        Month tmp = mCurrent.getMonth () + monthDiff;
         alarmTime.setMonth (tmp);
         LOG4CXX_DEBUG (mLogger, "setMonth/specific = " << tmp);
       }
     }
   }
+
+  /*if (isPast)
+  {
+    result = false;
+  }*/
 
   return result;
 }

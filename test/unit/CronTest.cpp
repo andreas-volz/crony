@@ -464,8 +464,8 @@ void CronTest::test13 ()
   DateTime alarmExpect;
 
   alarmExpect = mdtReference;
-  //alarmExpect.setYear (mdtReference.getYear () + 1);
- // alarmExpect.setMonth (mdtReference.getMonth () - 1);
+  alarmExpect.setYear (mdtReference.getYear () + 1);
+  alarmExpect.setMonth (mdtReference.getMonth () - 1);
   alarmExpect.setDayOfMonth (1);
   alarmExpect.setHours (0);
   alarmExpect.setMinutes (0);
@@ -474,7 +474,7 @@ void CronTest::test13 ()
   cron1.setCurrentDateTime (mdtReference);
 
   std::list <Month> monthList;
-  monthList.push_back (mdtReference.getMonth () - 2 + Cron::MonthShift);
+  monthList.push_back (mdtReference.getMonth () - 1 + Cron::MonthShift);
   cron1.setMonthList (monthList);
 
   try
