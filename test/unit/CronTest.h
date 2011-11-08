@@ -79,8 +79,12 @@ class CronTest : public CPPUNIT_NS::TestFixture
 
   // hit next day of month in future / morning time
   CPPUNIT_TEST (test22);
-  
-  // TODO: variant: add/subtract two instead of one (induktion...)...
+
+  // hit next from list of minutes
+  CPPUNIT_TEST (test23);
+
+  // hit next from list of minutes (don't hit current)
+  CPPUNIT_TEST (test24);
   
   CPPUNIT_TEST_SUITE_END ();
 
@@ -111,6 +115,8 @@ protected:
   void test20 ();
   void test21 ();
   void test22 ();
+  void test23 ();
+  void test24 ();
 
 private:
   crony::DateTime mdtReference;

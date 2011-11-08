@@ -204,7 +204,7 @@ bool Cron::checkYear (DateTime &alarmTime, bool recheck) const
       Year tmp = year - (mCurrent.getYear () + Cron::YearShift); // convert to struct tm format
 
       // check for nearest value above
-      if ((tmp >= 0) && (tmp <= yearDiff))
+      if ((tmp <= yearDiff) && (tmp > 0))
       {
         if (recheck)
         {
@@ -289,7 +289,7 @@ bool Cron::checkMonth (DateTime &alarmTime, bool recheck) const
         Month tmp = month - mCurrent.getMonth ();
 
         // check for nearest value above
-        if (tmp <= monthDiff)
+        if ((tmp <= monthDiff) && (tmp > 0))
         {
           if (recheck)
           {
@@ -389,7 +389,7 @@ bool Cron::checkDayOfWeek (DateTime &alarmTime, bool recheck) const
         }
 
         // check for nearest value above
-        if (tmp <= dayofmonthDiff)
+        if ((tmp <= dayofmonthDiff) && (tmp > 0))
         {
           if (recheck)
           {
@@ -479,7 +479,7 @@ bool Cron::checkDayOfMonth (DateTime &alarmTime, bool recheck) const
         DayOfMonth tmp = dayofmonth - mCurrent.getDayOfMonth ();
 
         // check for nearest value above
-        if (tmp <= dayofmonthDiff)
+        if ((tmp <= dayofmonthDiff) && (tmp > 0))
         {
           if (recheck)
           {
@@ -570,7 +570,7 @@ bool Cron::checkHour (DateTime &alarmTime, bool recheck) const
         Hour tmp = hour - mCurrent.getHours ();
         
         // check for nearest value above
-        if (tmp <= hourDiff)
+        if ((tmp <= hourDiff) && (tmp > 0))
         {
           if (recheck)
           {
@@ -645,7 +645,6 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
   {
     if (!isCurrent)
     {
-      LOG4CXX_INFO (mLogger, "not possible to hit minute in past: adding hours");
       Minute tmp = *min_element (mMinuteList.begin (), mMinuteList.end ());
       alarmTime.setMinutes (tmp);
       LOG4CXX_DEBUG (mLogger, "setMinute/minumum = " << tmp);
@@ -662,7 +661,7 @@ bool Cron::checkMinute (DateTime &alarmTime, bool recheck) const
         Minute tmp = minute - mCurrent.getMinutes ();
 
         // check for nearest value above
-        if (tmp <= minuteDiff)
+        if ((tmp <= minuteDiff)  && (tmp > 0))
         {
           if (recheck)
           {

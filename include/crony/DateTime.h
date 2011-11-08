@@ -85,7 +85,11 @@ public:
 
   // operators
   
-  double operator - (const DateTime &dt) const;
+  double operator - (const DateTime &dt) const; // TODO: fit API to + operator...
+
+  DateTime operator + (const DateTime &dt) const;
+
+  double operator + (const time_t seconds) const;
 
   bool operator < (const DateTime &dt) const;
 

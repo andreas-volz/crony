@@ -857,3 +857,95 @@ void CronTest::test22 ()
 
   CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
 }
+
+void CronTest::test23 ()
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+  DateTime dtReference;
+
+  dtReference.setYear (2010 - Cron::YearShift);
+  dtReference.setMonth (DateTime::April);
+  dtReference.setDayOfMonth (13);
+  dtReference.setHours (11);
+  dtReference.setMinutes (15);
+  dtReference.setSeconds (0); // 0 is important as Cron assumes always 0!
+
+  alarmExpect = dtReference;
+  alarmExpect.setMinutes (20);
+  alarmExpect.setSeconds (0);
+
+  cron1.setCurrentDateTime (dtReference);
+
+  std::list <Minute> minuteList;
+  minuteList.push_back (0);
+  minuteList.push_back (10);
+  minuteList.push_back (20);
+  minuteList.push_back (30);
+  minuteList.push_back (40);
+  minuteList.push_back (50);
+  cron1.setMinuteList (minuteList);
+
+  try
+  {
+    cerr << endl; // only for log formating
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
+
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}
+
+void CronTest::test24 ()
+{
+  Cron cron1;
+  DateTime alarmCalc;
+  DateTime alarmExpect;
+  DateTime dtReference;
+
+  dtReference.setYear (2010 - Cron::YearShift);
+  dtReference.setMonth (DateTime::April);
+  dtReference.setDayOfMonth (13);
+  dtReference.setHours (11);
+  dtReference.setMinutes (10);
+  dtReference.setSeconds (0); // 0 is important as Cron assumes always 0!
+
+  alarmExpect = dtReference;
+  alarmExpect.setMinutes (20);
+  alarmExpect.setSeconds (0);
+
+  cron1.setCurrentDateTime (dtReference);
+
+  std::list <Minute> minuteList;
+  minuteList.push_back (0);
+  minuteList.push_back (10);
+  minuteList.push_back (20);
+  minuteList.push_back (30);
+  minuteList.push_back (40);
+  minuteList.push_back (50);
+  cron1.setMinuteList (minuteList);
+
+  try
+  {
+    cerr << endl; // only for log formating
+    alarmCalc = cron1.calcNextHit ();
+  }
+  catch (CronInPastException ex)
+  {
+    cout << ex.what () << endl;
+    cout << "Expected: " << alarmExpect << endl;
+
+    CPPUNIT_ASSERT (false);
+    return;
+  }
+  
+  CPPUNIT_ASSERT_EQUAL (alarmExpect, alarmCalc);
+}

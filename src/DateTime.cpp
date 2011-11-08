@@ -151,6 +151,20 @@ double DateTime::operator - (const DateTime &dt) const
   return difftime (getTimestamp (), dt.getTimestamp ());
 }
 
+DateTime DateTime::operator + (const DateTime &dt) const
+{
+  double newTime;
+
+  newTime = getTimestamp () + dt.getTimestamp ();
+  
+  return DateTime (newTime);
+}
+
+double DateTime::operator + (const time_t seconds) const
+{
+  return getTimestamp () + seconds;
+}
+
 bool operator == (const DateTime &dt1, const DateTime &dt2)
 {
   return (dt1.getTimestamp () == dt2.getTimestamp ());
